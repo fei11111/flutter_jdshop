@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/focus_model_entity.dart';
+import 'package:flutter_jdshop/generated/json/base/json_convert_content.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -11,22 +14,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<FocusModelResult> list = [];
+
   Widget _getSwipeWidget() {
-    List<String> imageList = [
-      "https://www.itying.com/images/flutter/slide01.jpg",
-      "https://www.itying.com/images/flutter/slide02.jpg",
-      "https://www.itying.com/images/flutter/slide03.jpg"
-    ];
-    return AspectRatio(
-        aspectRatio: 2 / 1,
-        child: Swiper(
-          itemCount: imageList.length,
-          autoplay: true,
-          itemBuilder: (context, index) {
-            return Image.network(imageList[index], fit: BoxFit.cover);
-          },
-          pagination: SwiperPagination(),
-        ));
+    return list.length > 0
+        ? AspectRatio(
+            aspectRatio: 2 / 1,
+            child: Swiper(
+              itemCount: list.length,
+              autoplay: true,
+              itemBuilder: (context, index) {
+                String url = list[index].pic.replaceAll("\\", "/");
+                return Image.network("http://jd.itying.com/$url",
+                    fit: BoxFit.cover);
+              },
+              pagination: SwiperPagination(),
+            ))
+        : Text("加载中");
   }
 
   ///标题
@@ -228,6 +232,10 @@ class _HomePageState extends State<HomePage> {
 
   void _getFocusData() async {
     var result = await Dio().get("http://jd.itying.com/api/focus");
-    print(result);
+    var fromJson = FocusModelEntity().fromJson(result.data);
+    print("xxxx");
+    setState(() {
+      list = fromJson.result;
+    });
   }
 }
