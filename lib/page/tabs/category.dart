@@ -9,8 +9,9 @@ class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
-  int currentIndex = 0;
+class _CategoryPageState extends State<CategoryPage>
+    with AutomaticKeepAliveClientMixin {
+  int _currentIndex = 0;
   List<CateItemModel> leftList = [];
   List<CateItemModel> rightList = [];
 
@@ -18,6 +19,7 @@ class _CategoryPageState extends State<CategoryPage> {
   void initState() {
     super.initState();
     _getLeftCateData();
+    debugPrint("category initState");
   }
 
   Widget _getLeftCateWidget(double leftWidth) {
@@ -31,14 +33,21 @@ class _CategoryPageState extends State<CategoryPage> {
                     InkWell(
                       child: Container(
                         alignment: Alignment.center,
-                        margin: EdgeInsets.only(top: 30.h, bottom: 30.h),
+                        padding: EdgeInsets.only(top: 30.h, bottom: 30.h),
                         child: Text("${leftList[index].title}",
-                            textAlign: TextAlign.center),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: _currentIndex == index
+                                    ? Colors.white
+                                    : Colors.black54)),
+                        color: _currentIndex == index
+                            ? Colors.blueAccent
+                            : Colors.white,
                       ),
                       onTap: () {
-                        if (currentIndex != index) {
-                          currentIndex = index;
-                          _getRightCateData(currentIndex);
+                        if (_currentIndex != index) {
+                          _currentIndex = index;
+                          _getRightCateData(_currentIndex);
                         }
                       },
                     ),
@@ -133,4 +142,8 @@ class _CategoryPageState extends State<CategoryPage> {
       rightList = fromJson.result;
     });
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

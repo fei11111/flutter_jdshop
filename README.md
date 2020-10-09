@@ -19,7 +19,9 @@ samples, guidance on mobile development, and a full API reference.
 #### flutter版本：1.20.4 
 #### dart版本：2.9.2
 #### 插件：json to dart
-
 #### 屏幕适配：flutter_screenutil
 #### 轮播图：flutter_swiper
 #### 网络请求：dio
+
+
+#### IndexedStack不能滚动，PageView可以滚动切换

@@ -11,8 +11,28 @@ class TabsPage extends StatefulWidget {
 }
 
 class _TabsPageState extends State<TabsPage> {
-  List _pageList = [HomePage(), CategoryPage(), CartPage(), UserPage()];
+  List<Widget> _pageList = [HomePage(), CategoryPage(), CartPage(), UserPage()];
   var _currentIndex = 0;
+  PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _currentIndex);
+    _pageController.addListener(() {
+      int page = _pageController.page.toInt();
+      if (page != _currentIndex)
+        setState(() {
+          _currentIndex = page;
+        });
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,27 +40,33 @@ class _TabsPageState extends State<TabsPage> {
         designSize: Size(750, 1334), allowFontScaling: false);
     return Scaffold(
       appBar: AppBar(title: Text("jdshop")),
-      body: this._pageList[_currentIndex],
+      // body: IndexedStack(
+      //   index: _currentIndex,
+      //   children: _pageList,
+      // ),
+      body: PageView(
+        physics: BouncingScrollPhysics(),
+        controller: _pageController,
+        children: _pageList,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.red,
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-              ),
-              title: Text("首页")),
-          BottomNavigationBarItem(icon: Icon(Icons.category), title: Text("分类")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.add_shopping_cart), title: Text("购物车")),
-          BottomNavigationBarItem(icon: Icon(Icons.person), title: Text( "我的"))
-        ],
         onTap: (index) {
+          _pageController.jumpToPage(index);
           setState(() {
             _currentIndex = index;
           });
         },
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("首页")),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.category), title: Text("分类")),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.add_shopping_cart), title: Text("购物车")),
+          BottomNavigationBarItem(icon: Icon(Icons.person), title: Text("我的"))
+        ],
       ),
     );
   }

@@ -12,7 +12,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   List<FocusItemModel> list = [];
   List<ProductItemModel> likeProductList = [];
   List<ProductItemModel> hotProductList = [];
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     _getFocusData();
     _getLikeProductList();
     _getHotProductList();
+    debugPrint("home initState");
   }
 
   ///轮播图
@@ -281,4 +283,8 @@ class _HomePageState extends State<HomePage> {
       hotProductList = fromJson.result;
     });
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
