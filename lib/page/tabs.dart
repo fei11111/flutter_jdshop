@@ -30,11 +30,11 @@ class _TabsPageState extends State<TabsPage> {
               icon: Icon(
                 Icons.home,
               ),
-              label: "首页"),
-          BottomNavigationBarItem(icon: Icon(Icons.category), label: "分类"),
+              title: Text("首页")),
+          BottomNavigationBarItem(icon: Icon(Icons.category), title: Text("分类")),
           BottomNavigationBarItem(
-              icon: Icon(Icons.add_shopping_cart), label: "购物车"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "我的")
+              icon: Icon(Icons.add_shopping_cart), title: Text("购物车")),
+          BottomNavigationBarItem(icon: Icon(Icons.person), title: Text( "我的"))
         ],
         onTap: (index) {
           setState(() {

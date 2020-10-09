@@ -14,3 +14,12 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+#flutter 版本 1.20.4 
+#dart 版本 2.9.2
+#plugin json to dart
+
+#屏幕适配 flutter_screenutil
+#轮播图 flutter_swiper
+#网络请求 dio

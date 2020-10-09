@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jdshop/page/search.dart';
-import 'file:///D:/Workspaces/flutter_jdshop/lib/page/tabs.dart';
+import '../page/search.dart';
+import '../page/tabs.dart';
 
 //配置路由
 final routes = {

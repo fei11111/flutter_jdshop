@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/models/cate_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -7,67 +10,127 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  int currentIndex = 0;
+  List<CateItemModel> leftList = [];
+  List<CateItemModel> rightList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getLeftCateData();
+  }
+
+  Widget _getLeftCateWidget(double leftWidth) {
+    return leftList.length > 0
+        ? Container(
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    InkWell(
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(top: 30.h, bottom: 30.h),
+                        child: Text("${leftList[index].title}",
+                            textAlign: TextAlign.center),
+                      ),
+                      onTap: () {
+                        if (currentIndex != index) {
+                          currentIndex = index;
+                          _getRightCateData(currentIndex);
+                        }
+                      },
+                    ),
+                    Divider(height: 5.h)
+                  ],
+                );
+              },
+              itemCount: leftList.length,
+            ),
+            width: leftWidth,
+            height: double.infinity,
+          )
+        : Container(width: leftWidth, height: double.infinity);
+  }
+
+  Widget _getRightCateWidget(double itemWidth, double itemheight) {
+    return rightList.length > 0
+        ? Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.all(10.w),
+              child: GridView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: rightList.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 10.w,
+                      mainAxisSpacing: 10.w,
+                      childAspectRatio: itemWidth / itemheight,
+                      crossAxisCount: 3),
+                  itemBuilder: (context, index) {
+                    CateItemModel model = rightList[index];
+                    String url =
+                        Config.domain + model.pic.replaceAll("\\", "/");
+                    debugPrint("分类商品url:$url");
+                    return Container(
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 1 / 1,
+                            child: Image.network(url, fit: BoxFit.cover),
+                          ),
+                          Container(
+                            height: 30.h,
+                            child: Text(model.title),
+                          )
+                        ],
+                      ),
+                    );
+                  }),
+            ),
+          )
+        : Expanded(
+            flex: 1,
+            child: Container(
+              height: double.infinity,
+              child: Text("加载中....", textAlign: TextAlign.center),
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 10.w, right: 10.w),
-        child: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: 10,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10.w,
-              mainAxisSpacing: 10.w,
-            ),
-            itemBuilder: (context, index) {
-              return Container(
-                padding: EdgeInsets.all(10.w),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Color.fromRGBO(233, 233, 233, 0.9),
-                        width: 1.0.w)),
-                child: Column(
-                  children: [
-                    Container(
-                        width: double.infinity,
-                        child: AspectRatio(
-                            aspectRatio: 1 / 1,
-                            child: Image.network(
-                              "https://www.itying.com/images/flutter/list1.jpg",
-                              fit: BoxFit.cover,
-                            ))),
-                    Text(
-                      "2019夏季新款气质高贵洋气阔太太有女人味中长款宽松大码",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.black54),
-                    ),
-//                    SizedBox(height: 10.w),
-//                    Stack(
-//                      children: [
-//                        Align(
-//                          alignment: Alignment.topLeft,
-//                          child: Text(
-//                            "¥198.0",
-//                            style: TextStyle(color: Colors.red, fontSize: 16.0),
-//                          ),
-//                        ),
-//                        Align(
-//                          alignment: Alignment.topRight,
-//                          child: Text(
-//                            "¥299.0",
-//                            style: TextStyle(
-//                                color: Colors.black54,
-//                                fontSize: 14.0,
-//                                decoration: TextDecoration.lineThrough),
-//                          ),
-//                        )
-//                      ],
-//                    )
-                  ],
-                ),
-              );
-            }));
+    double screenWidth = ScreenUtil().screenWidth;
+    double leftWidth = screenWidth / 4;
+    double itemWidth = (screenWidth - leftWidth - 20.w - 20.w) / 3;
+    double itemheight = itemWidth + 30.h;
+    return Row(
+      children: [
+        _getLeftCateWidget(leftWidth),
+        _getRightCateWidget(itemWidth, itemheight)
+      ],
+    );
+  }
+
+  ///获取左侧列表数据
+  void _getLeftCateData() async {
+    var result = await Dio().get("${Config.domain}api/pcate");
+    var fromJson = CateModel.fromJson(result.data);
+    setState(() {
+      leftList = fromJson.result;
+    });
+    if (leftList.length > 0) {
+      _getRightCateData(0);
+    }
+  }
+
+  void _getRightCateData(int currentIndex) async {
+    var result = await Dio()
+        .get("${Config.domain}api/pcate?pid=${leftList[currentIndex].id}");
+    var fromJson = CateModel.fromJson(result.data);
+    setState(() {
+      rightList = fromJson.result;
+    });
   }
 }
