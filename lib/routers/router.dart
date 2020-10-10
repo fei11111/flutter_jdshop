@@ -7,7 +7,8 @@ import '../page/tabs.dart';
 final routes = {
   '/': (context) => TabsPage(),
   '/search': (context) => SearchPage(),
-  '/productList':(context)=>ProductListPage()
+  '/productList': (context, {arguments}) =>
+      ProductListPage(arguments: arguments)
 };
 
 //固定写法

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/cate_model.dart';
+import 'package:flutter_jdshop/widget/loading_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -22,6 +23,7 @@ class _CategoryPageState extends State<CategoryPage>
     debugPrint("category initState");
   }
 
+  ///左侧
   Widget _getLeftCateWidget(double leftWidth) {
     return leftList.length > 0
         ? Container(
@@ -63,6 +65,7 @@ class _CategoryPageState extends State<CategoryPage>
         : Container(width: leftWidth, height: double.infinity);
   }
 
+  ///右侧
   Widget _getRightCateWidget(double itemWidth, double itemheight) {
     return rightList.length > 0
         ? Expanded(
@@ -82,30 +85,30 @@ class _CategoryPageState extends State<CategoryPage>
                     String url =
                         Config.domain + model.pic.replaceAll("\\", "/");
                     debugPrint("分类商品url:$url");
-                    return Container(
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 1 / 1,
-                            child: Image.network(url, fit: BoxFit.cover),
+                    return InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, "/productList",
+                              arguments: {"cid": model.id});
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 1 / 1,
+                                child: Image.network(url, fit: BoxFit.fill),
+                              ),
+                              Container(
+                                height: 30.h,
+                                child: Text(model.title),
+                              )
+                            ],
                           ),
-                          Container(
-                            height: 30.h,
-                            child: Text(model.title),
-                          )
-                        ],
-                      ),
-                    );
+                        ));
                   }),
             ),
           )
-        : Expanded(
-            flex: 1,
-            child: Container(
-              height: double.infinity,
-              child: Text("加载中....", textAlign: TextAlign.center),
-            ));
+        : Expanded(flex: 1, child: LoadingWidget());
   }
 
   @override
@@ -134,6 +137,7 @@ class _CategoryPageState extends State<CategoryPage>
     }
   }
 
+  ///获取右侧列表数据
   void _getRightCateData(int currentIndex) async {
     var result = await Dio()
         .get("${Config.domain}api/pcate?pid=${leftList[currentIndex].id}");
@@ -144,6 +148,5 @@ class _CategoryPageState extends State<CategoryPage>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

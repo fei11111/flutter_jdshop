@@ -16,8 +16,8 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 
-#### flutter版本：2.11.0-203.0.dev
-#### dart版本：2.11.0-203.0.dev
+#### flutter版本：1.22.1
+#### dart版本：2.10.1
 #### 插件：json to dart
 #### 屏幕适配：flutter_screenutil
 #### 轮播图：flutter_swiper
@@ -25,3 +25,5 @@ samples, guidance on mobile development, and a full API reference.
 
 
 #### IndexedStack不能滚动，PageView可以滚动切换
+##### 地铁图怎么画
+##### icon动画效果
