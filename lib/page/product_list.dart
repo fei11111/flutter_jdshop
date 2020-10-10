@@ -104,6 +104,7 @@ class _ProductListPageState extends State<ProductListPage>
     debugPrint("商品列表");
     return _productList.length > 0
         ? ListView.builder(
+            physics: BouncingScrollPhysics(),
             controller: _scrollController,
             itemCount: _productList.length,
             itemBuilder: (context, index) {
