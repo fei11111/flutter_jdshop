@@ -4,6 +4,7 @@ import 'package:flutter_jdshop/page/tabs/category.dart';
 import 'package:flutter_jdshop/page/tabs/home.dart';
 import 'package:flutter_jdshop/page/tabs/user.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TabsPage extends StatefulWidget {
   @override
@@ -34,18 +35,61 @@ class _TabsPageState extends State<TabsPage> {
     super.dispose();
   }
 
+  Widget _getAppBarWidget() {
+    return _currentIndex != 3
+        ? AppBar(
+            elevation: 0.0,
+            titleSpacing: 0.0,
+            leading: IconButton(
+              icon: Icon(Icons.center_focus_weak,
+                  size: 28, color: Colors.black54),
+              onPressed: () {},
+            ),
+            title: InkWell(
+              child: Container(
+                padding: EdgeInsets.all(10.w),
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(233, 233, 233, 0.8),
+                    borderRadius: BorderRadius.circular(30)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.search, size: 24, color: Colors.black45),
+                    SizedBox(width: 10.w),
+                    Text("搜索最新商品",
+                        style:
+                            TextStyle(color: Colors.black54, fontSize: 28.sp))
+                  ],
+                ),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/search');
+              },
+            ),
+            actions: [
+              IconButton(
+                icon:
+                    Icon(Icons.message_sharp, size: 28, color: Colors.black45),
+                onPressed: () {},
+              )
+            ],
+          )
+        : AppBar(title: Text("我的"), elevation: 0.0);
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context,
         designSize: Size(750, 1334), allowFontScaling: false);
     return Scaffold(
-      appBar: AppBar(title: Text("jdshop")),
+      appBar: _getAppBarWidget(),
       // body: IndexedStack(
       //   index: _currentIndex,
       //   children: _pageList,
       // ),
       body: PageView(
         physics: BouncingScrollPhysics(),
+        // physics: NeverScrollableScrollPhysics(),
         controller: _pageController,
         children: _pageList,
       ),

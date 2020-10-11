@@ -8,7 +8,8 @@ final routes = {
   '/': (context) => TabsPage(),
   '/search': (context) => SearchPage(),
   '/productList': (context, {arguments}) =>
-      ProductListPage(arguments: arguments)
+      ProductListPage(arguments: arguments),
+  '/search': (context) => SearchPage()
 };
 
 //固定写法
