@@ -125,7 +125,7 @@ class _ProductListPageState extends State<ProductListPage>
                           Expanded(
                               flex: 1,
                               child: Container(
-                                height: 180.w,
+                                height: 180.h,
                                 margin: EdgeInsets.only(left: 20.w),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,9 +137,19 @@ class _ProductListPageState extends State<ProductListPage>
                                         overflow: TextOverflow.ellipsis),
                                     Row(
                                       children: [
-                                        Chip(label: Text("WIFI")),
+                                        Chip(
+                                            label: Text("WIFI",
+                                                style: TextStyle(
+                                                    fontSize: 20.sp,
+                                                    fontWeight:
+                                                        FontWeight.w400))),
                                         SizedBox(width: 10.w),
-                                        Chip(label: Text("128g"))
+                                        Chip(
+                                            label: Text("128g",
+                                                style: TextStyle(
+                                                    fontSize: 20.sp,
+                                                    fontWeight:
+                                                        FontWeight.w400)))
                                       ],
                                     ),
                                     Text(

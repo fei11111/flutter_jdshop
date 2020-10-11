@@ -6,10 +6,9 @@ import '../page/tabs.dart';
 //配置路由
 final routes = {
   '/': (context) => TabsPage(),
-  '/search': (context) => SearchPage(),
   '/productList': (context, {arguments}) =>
       ProductListPage(arguments: arguments),
-  '/search': (context) => SearchPage()
+  '/search': (context) => SearchPage(),
 };
 
 //固定写法
