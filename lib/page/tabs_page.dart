@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jdshop/page/tabs/cart.dart';
-import 'package:flutter_jdshop/page/tabs/category.dart';
-import 'package:flutter_jdshop/page/tabs/home.dart';
-import 'package:flutter_jdshop/page/tabs/user.dart';
+import 'package:flutter_jdshop/page/tabs/cart_page.dart';
+import 'package:flutter_jdshop/page/tabs/category_page.dart';
+import 'package:flutter_jdshop/page/tabs/home_page.dart';
+import 'package:flutter_jdshop/page/tabs/user_page.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -74,7 +74,7 @@ class _TabsPageState extends State<TabsPage> {
               )
             ],
           )
-        : AppBar(title: Text("我的"), elevation: 0.0);
+        : AppBar(centerTitle: true, title: Text("我的"), elevation: 0.0);
   }
 
   @override
