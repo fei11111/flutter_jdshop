@@ -17,8 +17,7 @@ class ProductDetailLeft extends StatefulWidget {
 
 class _ProductDetailLeftState extends State<ProductDetailLeft>
     with AutomaticKeepAliveClientMixin {
-
-  List<Attr> selectAttrs = [];
+  List<String> _selectAttrs = [];
 
   @override
   void initState() {
@@ -110,7 +109,9 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                                         color: Colors.black,
                                         fontWeight: FontWeight.w600)),
                                 SizedBox(width: 10.w),
-                                Text("115，黑色，XL，1件")
+                                Text(_selectAttrs.length > 0
+                                    ? _selectAttrs.toString()
+                                    : "")
                               ],
                             ),
                             onTap: () {
@@ -161,9 +162,27 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                               children: model.attr[index].list.map((e) {
                                 return Container(
                                     margin: EdgeInsets.only(left: 20.w),
-                                    child: Chip(
-                                        label: Text(e.toString()),
-                                        padding: EdgeInsets.all(10.w)));
+                                    child: InkWell(
+                                        highlightColor: Colors.transparent,
+                                        splashColor: Colors.transparent,
+                                        child: Chip(
+                                            label: Text(e.toString()),
+                                            padding: EdgeInsets.all(10.w),
+                                            backgroundColor:
+                                                _selectAttrs.contains(e)
+                                                    ? Colors.red
+                                                    : Color.fromRGBO(
+                                                        233, 233, 233, 0.8)),
+                                        onTap: () {
+                                          if (_selectAttrs.contains(e)) {
+                                            _selectAttrs.remove(e);
+                                          } else {
+                                            _selectAttrs.add(e);
+                                          }
+                                          setState(() {
+                                            _selectAttrs = _selectAttrs;
+                                          });
+                                        }));
                               }).toList(),
                             ))
                       ]);
