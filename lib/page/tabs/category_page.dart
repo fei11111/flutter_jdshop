@@ -23,6 +23,9 @@ class _CategoryPageState extends State<CategoryPage>
     debugPrint("category initState");
   }
 
+  @override
+  bool get wantKeepAlive => true;
+
   ///左侧
   Widget _getLeftCateWidget(double leftWidth) {
     return leftList.length > 0
@@ -127,7 +130,7 @@ class _CategoryPageState extends State<CategoryPage>
 
   ///获取左侧列表数据
   void _getLeftCateData() async {
-    var result = await Dio().get("${Config.domain}api/pcate");
+    var result = await Dio().get(Config.getCateLeft());
     var fromJson = CateModel.fromJson(result.data);
     setState(() {
       leftList = fromJson.result;
@@ -139,14 +142,11 @@ class _CategoryPageState extends State<CategoryPage>
 
   ///获取右侧列表数据
   void _getRightCateData(int currentIndex) async {
-    var result = await Dio()
-        .get("${Config.domain}api/pcate?pid=${leftList[currentIndex].id}");
+    var result =
+        await Dio().get(Config.getCateRight(leftList[currentIndex].id));
     var fromJson = CateModel.fromJson(result.data);
     setState(() {
       rightList = fromJson.result;
     });
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -76,10 +76,8 @@ class _ProductListPageState extends State<ProductListPage>
       _flag = false;
     });
 
-    var url = Config.domain +
-        "api/plist?cid=" +
-        widget.arguments['cid'] +
-        "&page=$_page&sort=${this._sort}&pageSize=$_pageSize";
+    var url =
+        Config.getProductList(widget.arguments['cid'], _page, _sort, _pageSize);
     debugPrint("商品列表url:$url");
     var response = await Dio().get(url);
     var result = ProductModel.fromJson(response.data);
@@ -113,45 +111,52 @@ class _ProductListPageState extends State<ProductListPage>
               debugPrint(imageUrl);
               return Column(
                 children: [
-                  Padding(
-                      padding: EdgeInsets.all(20.w),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 180.w,
-                            height: 180.h,
-                            child: Image.network(imageUrl, fit: BoxFit.cover),
-                          ),
-                          Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 180.w,
-                                margin: EdgeInsets.only(left: 20.w),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(model.title,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis),
-                                    Row(
+                  InkWell(
+                      child: Padding(
+                          padding: EdgeInsets.all(20.w),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 180.w,
+                                height: 180.h,
+                                child:
+                                    Image.network(imageUrl, fit: BoxFit.cover),
+                              ),
+                              Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    height: 180.w,
+                                    margin: EdgeInsets.only(left: 20.w),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Chip(label: Text("WIFI")),
-                                        SizedBox(width: 10.w),
-                                        Chip(label: Text("128g"))
+                                        Text(model.title,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis),
+                                        Row(
+                                          children: [
+                                            Chip(label: Text("WIFI")),
+                                            SizedBox(width: 10.w),
+                                            Chip(label: Text("128g"))
+                                          ],
+                                        ),
+                                        Text(
+                                          "¥${model.price}",
+                                          style: TextStyle(
+                                              color: Colors.red, fontSize: 16),
+                                        )
                                       ],
                                     ),
-                                    Text(
-                                      "¥${model.price}",
-                                      style: TextStyle(
-                                          color: Colors.red, fontSize: 16),
-                                    )
-                                  ],
-                                ),
-                              ))
-                        ],
-                      )),
+                                  ))
+                            ],
+                          )),
+                      onTap: () {
+                        Navigator.pushNamed(context, "/productDetail",
+                            arguments: {"id": model.id});
+                      }),
                   _getBottomWidget(index)
                 ],
               );

@@ -72,23 +72,28 @@ class _HomePageState extends State<HomePage>
                 itemBuilder: (context, index) {
                   var url = Config.domain +
                       likeProductList[index].pic.replaceAll("\\", "/");
-                  ;
                   print(url);
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                          child: Image.network("$url", fit: BoxFit.cover),
-                          height: 140.h,
-                          width: 140.w,
-                          margin: EdgeInsets.only(right: 21.w, bottom: 10.w)),
-                      Text(
-                        "¥${likeProductList[index].price}",
-                        textAlign: TextAlign.center,
-                      )
-                    ],
-                  );
+                  return InkWell(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              child: Image.network("$url", fit: BoxFit.cover),
+                              height: 140.h,
+                              width: 140.w,
+                              margin:
+                                  EdgeInsets.only(right: 21.w, bottom: 10.w)),
+                          Text(
+                            "¥${likeProductList[index].price}",
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, "/productDetail",
+                            arguments: {"id": likeProductList[index].id});
+                      });
                 }))
         : Text("");
   }
@@ -115,58 +120,64 @@ class _HomePageState extends State<HomePage>
                   var url = Config.domain +
                       hotProductList[index].pic.replaceAll("\\", "/");
                   print("热门推荐$url");
-                  return Container(
-                    padding: EdgeInsets.all(10.w),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Color.fromRGBO(233, 233, 233, 0.9),
-                            width: 1.0.w)),
-                    child: Column(
-                      children: [
-                        Container(
-                            width: double.infinity,
-                            child: AspectRatio(
-                                aspectRatio: 1 / 1,
-                                child: Image.network(
-                                  "$url",
-                                  fit: BoxFit.fill,
-                                ))),
-                        Container(
-                            height: 60.h,
-                            child: Text(
-                              "${hotProductList[index].title}",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.black54),
-                            )),
-                        SizedBox(height: 10.h),
-                        Container(
-                            height: 30.h,
-                            child: Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "¥${hotProductList[index].price}",
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 16.0),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Text(
-                                    "¥${hotProductList[index].oldPrice}",
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: 14.0,
-                                        decoration: TextDecoration.lineThrough),
-                                  ),
-                                )
-                              ],
-                            )),
-                      ],
-                    ),
-                  );
+                  return InkWell(
+                      child: Container(
+                        padding: EdgeInsets.all(10.w),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Color.fromRGBO(233, 233, 233, 0.9),
+                                width: 1.0.w)),
+                        child: Column(
+                          children: [
+                            Container(
+                                width: double.infinity,
+                                child: AspectRatio(
+                                    aspectRatio: 1 / 1,
+                                    child: Image.network(
+                                      "$url",
+                                      fit: BoxFit.fill,
+                                    ))),
+                            Container(
+                                height: 60.h,
+                                child: Text(
+                                  "${hotProductList[index].title}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(color: Colors.black54),
+                                )),
+                            SizedBox(height: 10.h),
+                            Container(
+                                height: 30.h,
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "¥${hotProductList[index].price}",
+                                        style: TextStyle(
+                                            color: Colors.red, fontSize: 16.0),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topRight,
+                                      child: Text(
+                                        "¥${hotProductList[index].oldPrice}",
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 14.0,
+                                            decoration:
+                                                TextDecoration.lineThrough),
+                                      ),
+                                    )
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, "/productDetail",
+                            arguments: {"id": hotProductList[index].id});
+                      });
                 }))
         : Text("");
   }
@@ -261,7 +272,7 @@ class _HomePageState extends State<HomePage>
   }
 
   void _getFocusData() async {
-    var result = await Dio().get("${Config.domain}api/focus");
+    var result = await Dio().get(Config.getFocus());
     var fromJson = FocusModel.fromJson(result.data);
     setState(() {
       list = fromJson.result;
@@ -269,7 +280,7 @@ class _HomePageState extends State<HomePage>
   }
 
   void _getLikeProductList() async {
-    var result = await Dio().get("${Config.domain}api/plist?is_hot=1");
+    var result = await Dio().get(Config.getLikeProductList());
     var fromJson = ProductModel.fromJson(result.data);
     setState(() {
       likeProductList = fromJson.result;
@@ -277,7 +288,7 @@ class _HomePageState extends State<HomePage>
   }
 
   void _getHotProductList() async {
-    var result = await Dio().get("${Config.domain}api/plist?is_best=1");
+    var result = await Dio().get(Config.getHotProductList());
     var fromJson = ProductModel.fromJson(result.data);
     setState(() {
       hotProductList = fromJson.result;

@@ -22,6 +22,7 @@ samples, guidance on mobile development, and a full API reference.
 #### 屏幕适配：flutter_screenutil
 #### 轮播图：flutter_swiper
 #### 网络请求：dio
+#### SP存储：shared_preferences
 
 
 #### IndexedStack不能滚动，PageView可以滚动切换

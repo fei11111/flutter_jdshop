@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jdshop/page/tabs/cart.dart';
-import 'package:flutter_jdshop/page/tabs/category.dart';
-import 'package:flutter_jdshop/page/tabs/home.dart';
-import 'package:flutter_jdshop/page/tabs/user.dart';
+import 'package:flutter_jdshop/page/tabs/cart_page.dart';
+import 'package:flutter_jdshop/page/tabs/category_page.dart';
+import 'package:flutter_jdshop/page/tabs/home_page.dart';
+import 'package:flutter_jdshop/page/tabs/user_page.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
 class TabsPage extends StatefulWidget {
