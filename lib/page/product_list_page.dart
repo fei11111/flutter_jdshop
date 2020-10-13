@@ -47,12 +47,16 @@ class _ProductListPageState extends State<ProductListPage>
   ///是否有数据
   bool _hasMore = true;
 
+  ///搜索关键字
+  String _keyWords;
+
   ///防止重复请求
   bool _flag = true;
 
   @override
   void initState() {
     super.initState();
+    _keyWords = widget.arguments["keyWords"];
     _tabController = TabController(length: 3, vsync: this);
     _requestProductData();
     _initListener();
@@ -77,8 +81,13 @@ class _ProductListPageState extends State<ProductListPage>
       _flag = false;
     });
 
-    var url =
-        Config.getProductList(widget.arguments['cid'], _page, _sort, _pageSize);
+    String url;
+    if (_keyWords == null) {
+      url = Config.getProductList(
+          widget.arguments['cid'], _page, _sort, _pageSize);
+    } else {
+      url = Config.getProductListByKeyWords(_keyWords, _page, _sort, _pageSize);
+    }
     debugPrint("商品列表url:$url");
     var response = await Dio().get(url);
     var result = ProductModel.fromJson(response.data);

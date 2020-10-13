@@ -8,6 +8,11 @@ class SPUtil {
     sharedPreferences.setString(key, value);
   }
 
+  static Future<void> setStringList(key, value) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setStringList(key, value);
+  }
+
   static Future<String> getString(key) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString(key);

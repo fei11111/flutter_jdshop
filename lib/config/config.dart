@@ -22,6 +22,13 @@ class Config {
         "api/plist?cid=$id&page=$page&sort=$sort&pageSize=$pageSize";
   }
 
+  ///商品列表
+  static String getProductListByKeyWords(
+      String keyWords, int page, String sort, int pageSize) {
+    return Config.domain +
+        "api/plist?search=$keyWords&page=$page&sort=$sort&pageSize=$pageSize";
+  }
+
   ///分类左侧
   static String getCateLeft() {
     return Config.domain + "api/pcate";

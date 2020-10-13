@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/utils/sp_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchPage extends StatefulWidget {
@@ -7,20 +8,29 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final String SP_KEY = "searchList";
+  var _keyWords;
+
+  @override
+  void initState() {
+    super.initState();
+    _getHistorySearchData();
+  }
+
+  void _getHistorySearchData() async {
+    List<String> list = await SPUtil.getStringList(SP_KEY);
+    if (list == null) {
+      list = [];
+    }
+    await SPUtil.setStringList(SP_KEY, list);
+    setState(() {
+      _historySearchList = list;
+    });
+  }
+
   List<String> _hotSearchList = [
     "女装",
     "男装",
-    "西装",
-    "女装11111",
-    "女装",
-    "男装",
-    "西装",
-    "女装",
-    "男装",
-    "西装"
-  ];
-
-  List<String> _historySearchList = [
     "电脑",
     "超级秒杀",
     "宝宝汽车",
@@ -28,13 +38,9 @@ class _SearchPageState extends State<SearchPage> {
     "男装",
     "西装",
     "裙子0",
-    "大衣11111",
-    "女装",
-    "男装",
-    "西装",
-    "裙子0",
-    "大衣11111"
   ];
+
+  List<String> _historySearchList = [];
 
   Widget _getAppBarWidget() {
     return AppBar(
@@ -55,13 +61,31 @@ class _SearchPageState extends State<SearchPage> {
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide.none)),
+          onChanged: (String value) {
+            setState(() {
+              _keyWords = value;
+            });
+          },
         ),
       ),
       actions: [
         Container(
             alignment: Alignment.center,
             padding: EdgeInsets.only(left: 20.w, right: 20.w),
-            child: InkWell(child: Text("搜索"), onTap: () {}))
+            child: InkWell(
+                child: Text("搜索"),
+                onTap: () {
+                  if (_keyWords == null || _keyWords.isEmpty) return;
+                  Navigator.pushNamed(context, "/productList",
+                      arguments: {"keyWords": _keyWords});
+                  if (!_historySearchList.contains(_keyWords)) {
+                    _historySearchList.add(_keyWords);
+                    SPUtil.setStringList(SP_KEY, _historySearchList);
+                    setState(() {
+                      _historySearchList = _historySearchList;
+                    });
+                  }
+                }))
       ],
     );
   }
@@ -88,16 +112,55 @@ class _SearchPageState extends State<SearchPage> {
       shrinkWrap: true,
       itemCount: _historySearchList.length,
       itemBuilder: (context, index) {
-        return Container(
-          padding: EdgeInsets.fromLTRB(20.w, 20.w, 20.w, 20.w),
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(
-                      width: 1.w, color: Color.fromRGBO(233, 233, 233, 0.8)))),
-          child: Text(_historySearchList[index]),
-        );
+        return InkWell(
+            child: Container(
+              padding: EdgeInsets.fromLTRB(20.w, 20.w, 20.w, 20.w),
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                          width: 1.w,
+                          color: Color.fromRGBO(233, 233, 233, 0.8)))),
+              child: Text(_historySearchList[index]),
+            ),
+            onLongPress: () {
+              _showDeleteDialog(context, _historySearchList[index]);
+            },
+            onTap: () {
+              Navigator.pushNamed(context, "/productList",
+                  arguments: {"keyWords": _historySearchList[index]});
+            });
       },
     ));
+  }
+
+  void _showDeleteDialog(context, String keyWord) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("提示信息！"),
+            content: Text("您确定要删除吗？"),
+            actions: [
+              FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context, "cancel");
+                  },
+                  child: Text("取消")),
+              FlatButton(
+                  onPressed: () {
+                    if (_historySearchList.contains(keyWord)) {
+                      _historySearchList.remove(keyWord);
+                      SPUtil.setStringList(SP_KEY, _historySearchList);
+                    }
+                    setState(() {
+                      _historySearchList = _historySearchList;
+                    });
+                    Navigator.pop(context, "ok");
+                  },
+                  child: Text("确定"))
+            ],
+          );
+        });
   }
 
   Widget _getClearHistoryWidget() {
@@ -108,6 +171,14 @@ class _SearchPageState extends State<SearchPage> {
         child: OutlineButton(
           borderSide:
               BorderSide(color: Color.fromRGBO(233, 233, 233, 0.8), width: 2.w),
+          onPressed: () async {
+            _historySearchList.clear();
+            if (await SPUtil.remove(SP_KEY)) {
+              setState(() {
+                _historySearchList = _historySearchList;
+              });
+            }
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [Icon(Icons.delete_outline), Text("清空历史搜索")],
