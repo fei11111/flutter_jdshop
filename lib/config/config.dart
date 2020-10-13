@@ -43,4 +43,9 @@ class Config {
   static String getProductDetail(String id) {
     return Config.domain + "api/pcontent?id=$id";
   }
+
+  ///商品详情网页
+  static String getProductDetailWeb(String id) {
+    return Config.domain + "pcontent?id=$id";
+  }
 }

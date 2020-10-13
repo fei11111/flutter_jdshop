@@ -131,7 +131,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     child: TabBarView(
                       children: [
                         ProductDetailLeft(itemModel: _itemModel),
-                        ProductDetailMiddle(),
+                        ProductDetailMiddle(
+                            arguments: {"id": widget.arguments['id']}),
                         ProductDetailRight()
                       ],
                     )),
