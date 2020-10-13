@@ -12,26 +12,26 @@ class ProductDetailLeft extends StatefulWidget {
   const ProductDetailLeft({Key key, this.itemModel}) : super(key: key);
 
   @override
-  _ProductDetailLeftState createState() => _ProductDetailLeftState(itemModel);
+  _ProductDetailLeftState createState() => _ProductDetailLeftState();
 }
 
 class _ProductDetailLeftState extends State<ProductDetailLeft>
     with AutomaticKeepAliveClientMixin {
-  final ProductDetailItemModel _itemModel;
+  ProductDetailItemModel _itemModel;
   List<String> _selectAttrs = [];
   List<Attr> _attrs = [];
-
-  _ProductDetailLeftState(this._itemModel);
 
   @override
   void initState() {
     super.initState();
-    debugPrint("initState");
-    // _initAttrs();
+    debugPrint("ProductDetailLeft initState");
+    _itemModel = widget.itemModel;
+    _initAttrs();
   }
 
   void _initAttrs() {
-    _itemModel.attr.map((e) {
+    debugPrint("_initAttrs");
+    _itemModel.attr.forEach((e) {
       for (int i = 0; i < e.list.length; i++) {
         if (i == 0) {
           e.attrList.add({"title": e.list[i], "checked": true});
@@ -39,7 +39,18 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
           e.attrList.add({"title": e.list[i], "checked": false});
         }
       }
-      debugPrint(e.attrList.toString());
+    });
+    _setSelectAttrs();
+  }
+
+  void _setSelectAttrs() {
+    _selectAttrs.clear();
+    _itemModel.attr.forEach((e) {
+      for (int i = 0; i < e.attrList.length; i++) {
+        if (e.attrList[i]["checked"] == true) {
+          _selectAttrs.add(e.attrList[i]["title"]);
+        }
+      }
     });
   }
 
@@ -49,114 +60,108 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
   @override
   Widget build(BuildContext context) {
     debugPrint("build");
-    return _itemModel != null
-        ? Container(
-            child: ListView(physics: BouncingScrollPhysics(), children: [
-              Image.network(
-                  "${Config.domain}${_itemModel.pic.replaceAll("\\", "/")}",
-                  fit: BoxFit.cover),
-              Padding(
-                  padding: EdgeInsets.all(10.w),
-                  child: Column(children: [
-                    Container(
-                        margin: EdgeInsets.only(top: 10.h),
-                        child: Text(_itemModel.title,
-                            style: TextStyle(
-                                fontSize: 32.sp, color: Colors.black87))),
-                    Container(
-                        margin: EdgeInsets.only(top: 10.h),
-                        child: _itemModel.subTitle != null
-                            ? Text(_itemModel.subTitle,
-                                style: TextStyle(
-                                    fontSize: 28.sp, color: Colors.black54))
-                            : Html(data: _itemModel.content)),
-                    SizedBox(height: 10.h),
-                    Row(
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: '特价:',
-                            style: TextStyle(
-                                fontSize: 26.sp,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w600),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: '￥${_itemModel.price}',
-                                  style: TextStyle(
-                                      fontSize: 34.sp, color: Colors.red)),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                            flex: 1,
-                            child: RichText(
-                              textAlign: TextAlign.end,
-                              text: TextSpan(
-                                text: '原价:',
+    return Container(
+      child: ListView(physics: BouncingScrollPhysics(), children: [
+        Image.network("${Config.domain}${_itemModel.pic.replaceAll("\\", "/")}",
+            fit: BoxFit.cover),
+        Padding(
+            padding: EdgeInsets.all(10.w),
+            child: Column(children: [
+              Container(
+                  margin: EdgeInsets.only(top: 10.h),
+                  child: Text(_itemModel.title,
+                      style:
+                          TextStyle(fontSize: 32.sp, color: Colors.black87))),
+              Container(
+                  margin: EdgeInsets.only(top: 10.h),
+                  child: _itemModel.subTitle != null
+                      ? Text(_itemModel.subTitle,
+                          style:
+                              TextStyle(fontSize: 28.sp, color: Colors.black54))
+                      : Html(data: _itemModel.content)),
+              SizedBox(height: 10.h),
+              Row(
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      text: '特价:',
+                      style: TextStyle(
+                          fontSize: 26.sp,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w600),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: '￥${_itemModel.price}',
+                            style:
+                                TextStyle(fontSize: 34.sp, color: Colors.red)),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: RichText(
+                        textAlign: TextAlign.end,
+                        text: TextSpan(
+                          text: '原价:',
+                          style: TextStyle(
+                              decoration: TextDecoration.lineThrough,
+                              fontSize: 26.sp,
+                              color: Colors.black54),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: '￥${_itemModel.oldPrice}',
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
                                     fontSize: 26.sp,
-                                    color: Colors.black54),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '￥${_itemModel.oldPrice}',
-                                      style: TextStyle(
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                          fontSize: 26.sp,
-                                          color: Colors.black54)),
-                                ],
-                              ),
-                            ))
-                      ],
-                    ),
-                    Container(
-                        height: 80.h,
-                        padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color:
-                                        Color.fromRGBO(233, 233, 233, 0.8)))),
-                        child: InkWell(
-                            child: Row(
-                              children: [
-                                Text("已选:",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600)),
-                                SizedBox(width: 10.w),
-                                Text(_selectAttrs.length > 0
-                                    ? _selectAttrs.toString()
-                                    : "")
-                              ],
-                            ),
-                            onTap: () {
-                              _showBottomDialog(context, _itemModel);
-                            })),
-                    Container(
-                        height: 80.h,
-                        padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color:
-                                        Color.fromRGBO(233, 233, 233, 0.8)))),
-                        child: Row(
-                          children: [
-                            Text("运费:",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600)),
-                            SizedBox(width: 10.w),
-                            Text("免费")
+                                    color: Colors.black54)),
                           ],
-                        ))
-                  ]))
-            ]),
-          )
-        : LoadingWidget();
+                        ),
+                      ))
+                ],
+              ),
+              Container(
+                  height: 80.h,
+                  padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Color.fromRGBO(233, 233, 233, 0.8)))),
+                  child: InkWell(
+                      child: Row(
+                        children: [
+                          Text("已选:",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600)),
+                          SizedBox(width: 10.w),
+                          Text(_selectAttrs.length > 0
+                              ? _selectAttrs.toString()
+                              : "")
+                        ],
+                      ),
+                      onTap: () {
+                        _showBottomDialog(context, _itemModel);
+                      })),
+              Container(
+                  height: 80.h,
+                  padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Color.fromRGBO(233, 233, 233, 0.8)))),
+                  child: Row(
+                    children: [
+                      Text("运费:",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600)),
+                      SizedBox(width: 10.w),
+                      Text("免费")
+                    ],
+                  ))
+            ]))
+      ]),
+    );
   }
 
   ///确认dialog
@@ -191,14 +196,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                                                   : Color.fromRGBO(
                                                       233, 233, 233, 0.8)),
                                       onTap: () {
-                                        if (_selectAttrs.contains(e)) {
-                                          _selectAttrs.remove(e);
-                                        } else {
-                                          _selectAttrs.add(e);
-                                        }
-                                        setState(() {
-                                          _selectAttrs = _selectAttrs;
-                                        });
+
                                       }));
                             }).toList(),
                           )

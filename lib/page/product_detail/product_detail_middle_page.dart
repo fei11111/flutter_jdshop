@@ -17,7 +17,7 @@ class _ProductDetailMiddleState extends State<ProductDetailMiddle>
   @override
   void initState() {
     super.initState();
-    debugPrint("ProductDetailMiddle");
+    debugPrint("ProductDetailMiddle initState");
   }
 
   @override

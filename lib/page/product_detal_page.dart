@@ -7,6 +7,7 @@ import 'package:flutter_jdshop/page/product_detail/product_detail_left_page.dart
 import 'package:flutter_jdshop/page/product_detail/product_detail_middle_page.dart';
 import 'package:flutter_jdshop/page/tabs_page.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
+import 'package:flutter_jdshop/widget/loading_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 ///商品详情页面
@@ -132,8 +133,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     margin: EdgeInsets.only(bottom: 90.h),
                     child: TabBarView(
                       children: [
-                        ProductDetailLeft(itemModel: _itemModel),
-                        ProductDetailMiddle(arguments: {"id": _id}),
+                        _itemModel == null
+                            ? LoadingWidget()
+                            : ProductDetailLeft(itemModel: _itemModel),
+                        _id == null || _id.isEmpty
+                            ? LoadingWidget()
+                            : ProductDetailMiddle(arguments: {"id": _id}),
                         ProductDetailRight()
                       ],
                     )),
