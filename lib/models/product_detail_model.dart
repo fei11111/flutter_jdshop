@@ -23,14 +23,13 @@ class ProductDetailModel {
 class Attr {
   String cate;
   List<String> list;
+  List<Map> attrList;
 
-  Attr({this.cate, this.list});
+  Attr({this.cate, this.list, this.attrList});
 
   factory Attr.fromJson(Map<String, dynamic> json) {
     return Attr(
-      cate: json['cate'],
-      list: json['list'].cast<String>(),
-    );
+        cate: json['cate'], list: json['list'].cast<String>(), attrList: []);
   }
 
   Map<String, dynamic> toJson() {

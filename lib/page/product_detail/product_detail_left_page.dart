@@ -12,17 +12,35 @@ class ProductDetailLeft extends StatefulWidget {
   const ProductDetailLeft({Key key, this.itemModel}) : super(key: key);
 
   @override
-  _ProductDetailLeftState createState() => _ProductDetailLeftState();
+  _ProductDetailLeftState createState() => _ProductDetailLeftState(itemModel);
 }
 
 class _ProductDetailLeftState extends State<ProductDetailLeft>
     with AutomaticKeepAliveClientMixin {
+  final ProductDetailItemModel _itemModel;
   List<String> _selectAttrs = [];
+  List<Attr> _attrs = [];
+
+  _ProductDetailLeftState(this._itemModel);
 
   @override
   void initState() {
     super.initState();
-    debugPrint("ProductDetailHead");
+    debugPrint("initState");
+    // _initAttrs();
+  }
+
+  void _initAttrs() {
+    _itemModel.attr.map((e) {
+      for (int i = 0; i < e.list.length; i++) {
+        if (i == 0) {
+          e.attrList.add({"title": e.list[i], "checked": true});
+        } else {
+          e.attrList.add({"title": e.list[i], "checked": false});
+        }
+      }
+      debugPrint(e.attrList.toString());
+    });
   }
 
   @override
@@ -30,28 +48,28 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
 
   @override
   Widget build(BuildContext context) {
-    ProductDetailItemModel model = widget.itemModel;
-    return model != null
+    debugPrint("build");
+    return _itemModel != null
         ? Container(
             child: ListView(physics: BouncingScrollPhysics(), children: [
               Image.network(
-                  "${Config.domain}${model.pic.replaceAll("\\", "/")}",
+                  "${Config.domain}${_itemModel.pic.replaceAll("\\", "/")}",
                   fit: BoxFit.cover),
               Padding(
                   padding: EdgeInsets.all(10.w),
                   child: Column(children: [
                     Container(
                         margin: EdgeInsets.only(top: 10.h),
-                        child: Text(model.title,
+                        child: Text(_itemModel.title,
                             style: TextStyle(
                                 fontSize: 32.sp, color: Colors.black87))),
                     Container(
                         margin: EdgeInsets.only(top: 10.h),
-                        child: model.subTitle != null
-                            ? Text(model.subTitle,
+                        child: _itemModel.subTitle != null
+                            ? Text(_itemModel.subTitle,
                                 style: TextStyle(
                                     fontSize: 28.sp, color: Colors.black54))
-                            : Html(data: model.content)),
+                            : Html(data: _itemModel.content)),
                     SizedBox(height: 10.h),
                     Row(
                       children: [
@@ -64,7 +82,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                                 fontWeight: FontWeight.w600),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: '￥${model.price}',
+                                  text: '￥${_itemModel.price}',
                                   style: TextStyle(
                                       fontSize: 34.sp, color: Colors.red)),
                             ],
@@ -82,7 +100,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                                     color: Colors.black54),
                                 children: <TextSpan>[
                                   TextSpan(
-                                      text: '￥${model.oldPrice}',
+                                      text: '￥${_itemModel.oldPrice}',
                                       style: TextStyle(
                                           decoration:
                                               TextDecoration.lineThrough,
@@ -115,7 +133,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                               ],
                             ),
                             onTap: () {
-                              _showBottomDialog(context, model);
+                              _showBottomDialog(context, _itemModel);
                             })),
                     Container(
                         height: 80.h,
@@ -146,55 +164,55 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return Stack(children: [
-            Container(
-                margin: EdgeInsets.only(bottom: 90.h),
-                child: Padding(
-                  padding: EdgeInsets.all(10.w),
-                  child: ListView.builder(
-                    itemCount: model.attr.length,
-                    itemBuilder: (context, index) {
-                      return Row(children: [
-                        Text("${model.attr[index].cate}:"),
-                        Expanded(
-                            flex: 1,
-                            child: Wrap(
-                              children: model.attr[index].list.map((e) {
-                                return Container(
-                                    margin: EdgeInsets.only(left: 20.w),
-                                    child: InkWell(
-                                        highlightColor: Colors.transparent,
-                                        splashColor: Colors.transparent,
-                                        child: Chip(
-                                            label: Text(e.toString()),
-                                            padding: EdgeInsets.all(10.w),
-                                            backgroundColor:
-                                                _selectAttrs.contains(e)
-                                                    ? Colors.red
-                                                    : Color.fromRGBO(
-                                                        233, 233, 233, 0.8)),
-                                        onTap: () {
-                                          if (_selectAttrs.contains(e)) {
-                                            _selectAttrs.remove(e);
-                                          } else {
-                                            _selectAttrs.add(e);
-                                          }
-                                          setState(() {
-                                            _selectAttrs = _selectAttrs;
-                                          });
-                                        }));
-                              }).toList(),
-                            ))
-                      ]);
-                    },
-                  ),
-                )),
-            Align(
-                alignment: Alignment.bottomCenter,
-                child: CustomButton("确认", Colors.red, () {
-                  Navigator.pop(context);
-                }))
-          ]);
+          return StatefulBuilder(builder: (context, setState) {
+            return Stack(children: [
+              Container(
+                  margin: EdgeInsets.only(bottom: 90.h),
+                  child: Padding(
+                    padding: EdgeInsets.all(10.w),
+                    child: ListView.builder(
+                      itemCount: model.attr.length,
+                      itemBuilder: (context, index) {
+                        return Row(children: [
+                          Text("${model.attr[index].cate}:"),
+                          Wrap(
+                            children: model.attr[index].list.map((e) {
+                              return Container(
+                                  margin: EdgeInsets.only(left: 20.w),
+                                  child: InkWell(
+                                      highlightColor: Colors.transparent,
+                                      splashColor: Colors.transparent,
+                                      child: Chip(
+                                          label: Text(e.toString()),
+                                          padding: EdgeInsets.all(10.w),
+                                          backgroundColor:
+                                              _selectAttrs.contains(e)
+                                                  ? Colors.red
+                                                  : Color.fromRGBO(
+                                                      233, 233, 233, 0.8)),
+                                      onTap: () {
+                                        if (_selectAttrs.contains(e)) {
+                                          _selectAttrs.remove(e);
+                                        } else {
+                                          _selectAttrs.add(e);
+                                        }
+                                        setState(() {
+                                          _selectAttrs = _selectAttrs;
+                                        });
+                                      }));
+                            }).toList(),
+                          )
+                        ]);
+                      },
+                    ),
+                  )),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CustomButton("确认", Colors.red, () {
+                    Navigator.pop(context);
+                  }))
+            ]);
+          });
         });
   }
 }

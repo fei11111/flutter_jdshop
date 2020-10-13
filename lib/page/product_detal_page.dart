@@ -21,6 +21,7 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   ProductDetailItemModel _itemModel;
+  String _id;
 
   @override
   void initState() {
@@ -29,7 +30,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   void _getProductDetailData() async {
-    String url = Config.getProductDetail(widget.arguments['id']);
+    _id = widget.arguments['id'];
+    String url = Config.getProductDetail(_id);
     debugPrint("商品详情URL:$url");
     var response = await Dio().get(url);
     var data = ProductDetailModel.fromJson(response.data);
@@ -131,8 +133,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     child: TabBarView(
                       children: [
                         ProductDetailLeft(itemModel: _itemModel),
-                        ProductDetailMiddle(
-                            arguments: {"id": widget.arguments['id']}),
+                        ProductDetailMiddle(arguments: {"id": _id}),
                         ProductDetailRight()
                       ],
                     )),
