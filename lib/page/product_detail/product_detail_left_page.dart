@@ -19,7 +19,6 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
     with AutomaticKeepAliveClientMixin {
   ProductDetailItemModel _itemModel;
   List<String> _selectAttrs = [];
-  List<Attr> _attrs = [];
 
   @override
   void initState() {
@@ -51,6 +50,9 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
           _selectAttrs.add(e.attrList[i]["title"]);
         }
       }
+    });
+    setState(() {
+      _selectAttrs = _selectAttrs;
     });
   }
 
@@ -188,7 +190,12 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                                       highlightColor: Colors.transparent,
                                       splashColor: Colors.transparent,
                                       child: Chip(
-                                          label: Text(e.toString()),
+                                          label: Text(e.toString(),
+                                              style: TextStyle(
+                                                  color:
+                                                      _selectAttrs.contains(e)
+                                                          ? Colors.white
+                                                          : Colors.black)),
                                           padding: EdgeInsets.all(10.w),
                                           backgroundColor:
                                               _selectAttrs.contains(e)
@@ -196,7 +203,18 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                                                   : Color.fromRGBO(
                                                       233, 233, 233, 0.8)),
                                       onTap: () {
-
+                                        model.attr[index].attrList
+                                            .forEach((element) {
+                                          if (element["title"] == e) {
+                                            element["checked"] = true;
+                                          } else {
+                                            element["checked"] = false;
+                                          }
+                                        });
+                                        setState(() {
+                                          model.attr = model.attr;
+                                        });
+                                        _setSelectAttrs();
                                       }));
                             }).toList(),
                           )
