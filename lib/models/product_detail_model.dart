@@ -29,13 +29,16 @@ class Attr {
 
   factory Attr.fromJson(Map<String, dynamic> json) {
     return Attr(
-        cate: json['cate'], list: json['list'].cast<String>(), attrList: []);
+        cate: json['cate'],
+        list: json['list'].cast<String>(),
+        attrList: json['attrList'] == null ? [] : json['attrList'].cast<Map>());
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['cate'] = this.cate;
     data['list'] = this.list;
+    data['attrList'] = this.attrList;
     return data;
   }
 }

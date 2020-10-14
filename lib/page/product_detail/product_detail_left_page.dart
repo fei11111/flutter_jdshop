@@ -1,9 +1,11 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
-import 'package:flutter_jdshop/widget/loading_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductDetailLeft extends StatefulWidget {
@@ -142,7 +144,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                         ],
                       ),
                       onTap: () {
-                        _showBottomDialog(context, _itemModel);
+                        _showBottomDialog(context);
                       })),
               Container(
                   height: 80.h,
@@ -167,54 +169,64 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
   }
 
   ///确认dialog
-  void _showBottomDialog(context, ProductDetailItemModel model) {
+  void _showBottomDialog(context) {
+    List<Attr> tempAttr = _itemModel.attr.map((element) {
+      return Attr(
+          cate: element.cate,
+          list: element.list,
+          attrList: element.attrList.map((e) {
+            var map = {};
+            map["title"] = e["title"];
+            map["checked"] = e["checked"];
+            return map;
+          }).toList());
+    }).toList();
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
+          return StatefulBuilder(builder: (context, dialogSetState) {
+            debugPrint("StatefulBuilder");
             return Stack(children: [
               Container(
                   margin: EdgeInsets.only(bottom: 90.h),
                   child: Padding(
                     padding: EdgeInsets.all(10.w),
                     child: ListView.builder(
-                      itemCount: model.attr.length,
+                      itemCount: tempAttr.length,
                       itemBuilder: (context, index) {
                         return Row(children: [
-                          Text("${model.attr[index].cate}:"),
+                          Text("${tempAttr[index].cate}:"),
                           Wrap(
-                            children: model.attr[index].list.map((e) {
+                            children: tempAttr[index].attrList.map((e) {
                               return Container(
                                   margin: EdgeInsets.only(left: 20.w),
                                   child: InkWell(
                                       highlightColor: Colors.transparent,
                                       splashColor: Colors.transparent,
                                       child: Chip(
-                                          label: Text(e.toString(),
+                                          label: Text(e["title"],
                                               style: TextStyle(
-                                                  color:
-                                                      _selectAttrs.contains(e)
-                                                          ? Colors.white
-                                                          : Colors.black)),
+                                                  color: e["checked"] == true
+                                                      ? Colors.white
+                                                      : Colors.black)),
                                           padding: EdgeInsets.all(10.w),
-                                          backgroundColor:
-                                              _selectAttrs.contains(e)
-                                                  ? Colors.red
-                                                  : Color.fromRGBO(
-                                                      233, 233, 233, 0.8)),
+                                          backgroundColor: e["checked"] == true
+                                              ? Colors.red
+                                              : Color.fromRGBO(
+                                                  233, 233, 233, 0.8)),
                                       onTap: () {
-                                        model.attr[index].attrList
+                                        tempAttr[index]
+                                            .attrList
                                             .forEach((element) {
-                                          if (element["title"] == e) {
+                                          if (element["title"] == e["title"]) {
                                             element["checked"] = true;
                                           } else {
                                             element["checked"] = false;
                                           }
                                         });
-                                        setState(() {
-                                          model.attr = model.attr;
+                                        dialogSetState(() {
+                                          tempAttr = tempAttr;
                                         });
-                                        _setSelectAttrs();
                                       }));
                             }).toList(),
                           )
@@ -226,6 +238,10 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                   alignment: Alignment.bottomCenter,
                   child: CustomButton("确认", Colors.red, () {
                     Navigator.pop(context);
+                    setState(() {
+                      _itemModel.attr = tempAttr;
+                    });
+                    _setSelectAttrs();
                   }))
             ]);
           });
