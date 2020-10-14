@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jdshop/providers/counter.dart';
+import 'package:flutter_jdshop/providers/cart.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
@@ -16,10 +16,21 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-        child: Text("购物车+1"),
-        onPressed: () {
-          context.read<Counter>().increment();
-        });
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("购物车"),
+          elevation: 0.0,
+          actions: [
+            IconButton(
+                icon: Icon(Icons.launch),
+                onPressed: () {
+                  debugPrint("分享");
+                })
+          ],
+        ),
+        body: Stack(
+          children: [],
+        ));
   }
 }

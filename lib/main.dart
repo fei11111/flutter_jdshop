@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_jdshop/providers/counter.dart';
+import 'package:flutter_jdshop/providers/cart.dart';
 import 'package:flutter_jdshop/routers/router.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => Counter())],
+      providers: [ChangeNotifierProvider(create: (_) => Cart())],
       child: MyApp()));
 }
 

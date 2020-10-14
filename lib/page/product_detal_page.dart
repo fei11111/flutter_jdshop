@@ -132,6 +132,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 Container(
                     margin: EdgeInsets.only(bottom: 90.h),
                     child: TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
                       children: [
                         _itemModel == null
                             ? LoadingWidget()

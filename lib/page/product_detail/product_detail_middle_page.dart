@@ -27,9 +27,6 @@ class _ProductDetailMiddleState extends State<ProductDetailMiddle>
     return Column(children: [
       Expanded(
         child: Container(
-          margin: const EdgeInsets.all(10.0),
-          decoration:
-              BoxDecoration(border: Border.all(color: Colors.blueAccent)),
           child: InAppWebView(
             initialUrl: Config.getProductDetailWeb(widget.arguments['id']),
             initialHeaders: {},

@@ -120,12 +120,48 @@ class _CategoryPageState extends State<CategoryPage>
     double leftWidth = screenWidth / 4;
     double itemWidth = (screenWidth - leftWidth - 20.w - 20.w) / 3;
     double itemheight = itemWidth + 30.h;
-    return Row(
-      children: [
-        _getLeftCateWidget(leftWidth),
-        _getRightCateWidget(itemWidth, itemheight)
-      ],
-    );
+    return Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          titleSpacing: 0.0,
+          leading: IconButton(
+            icon:
+                Icon(Icons.center_focus_weak, size: 28, color: Colors.black54),
+            onPressed: () {},
+          ),
+          title: InkWell(
+            child: Container(
+              padding: EdgeInsets.all(10.w),
+              decoration: BoxDecoration(
+                  color: Color.fromRGBO(233, 233, 233, 0.8),
+                  borderRadius: BorderRadius.circular(30)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.search, size: 24, color: Colors.black45),
+                  SizedBox(width: 10.w),
+                  Text("搜索最新商品",
+                      style: TextStyle(color: Colors.black54, fontSize: 28.sp))
+                ],
+              ),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/search');
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.message_sharp, size: 28, color: Colors.black45),
+              onPressed: () {},
+            )
+          ],
+        ),
+        body: Row(
+          children: [
+            _getLeftCateWidget(leftWidth),
+            _getRightCateWidget(itemWidth, itemheight)
+          ],
+        ));
   }
 
   ///获取左侧列表数据

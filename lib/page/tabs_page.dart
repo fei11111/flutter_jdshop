@@ -82,7 +82,6 @@ class _TabsPageState extends State<TabsPage> {
     ScreenUtil.init(context,
         designSize: Size(750, 1334), allowFontScaling: false);
     return Scaffold(
-      appBar: _getAppBarWidget(),
       // body: IndexedStack(
       //   index: _currentIndex,
       //   children: _pageList,

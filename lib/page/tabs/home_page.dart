@@ -243,32 +243,68 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: BouncingScrollPhysics(),
-      children: [
-        _getSwipeWidget(),
-        SizedBox(height: 10.h),
-        _getTitleWidget("猜你喜欢"),
-        SizedBox(height: 10.h),
-        _getLikeProductListWidget(),
-        SizedBox(height: 10.h),
-        _getTitleWidget("热门推荐"),
-        SizedBox(height: 10.h),
-        //        Wrap(
-        //          runSpacing: 10,
-        //          spacing: 10,
-        //          children: [
-        //            _recProductItemWidget(),
-        //            _recProductItemWidget(),
-        //            _recProductItemWidget(),
-        //            _recProductItemWidget(),
-        //            _recProductItemWidget(),
-        //            _recProductItemWidget()
-        //          ],
-        //        ),
-        _getHotProductWidget()
-      ],
-    );
+    return Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          titleSpacing: 0.0,
+          leading: IconButton(
+            icon:
+                Icon(Icons.center_focus_weak, size: 28, color: Colors.black54),
+            onPressed: () {},
+          ),
+          title: InkWell(
+            child: Container(
+              padding: EdgeInsets.all(10.w),
+              decoration: BoxDecoration(
+                  color: Color.fromRGBO(233, 233, 233, 0.8),
+                  borderRadius: BorderRadius.circular(30)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.search, size: 24, color: Colors.black45),
+                  SizedBox(width: 10.w),
+                  Text("搜索最新商品",
+                      style: TextStyle(color: Colors.black54, fontSize: 28.sp))
+                ],
+              ),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/search');
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.message_sharp, size: 28, color: Colors.black45),
+              onPressed: () {},
+            )
+          ],
+        ),
+        body: ListView(
+          physics: BouncingScrollPhysics(),
+          children: [
+            _getSwipeWidget(),
+            SizedBox(height: 10.h),
+            _getTitleWidget("猜你喜欢"),
+            SizedBox(height: 10.h),
+            _getLikeProductListWidget(),
+            SizedBox(height: 10.h),
+            _getTitleWidget("热门推荐"),
+            SizedBox(height: 10.h),
+            //        Wrap(
+            //          runSpacing: 10,
+            //          spacing: 10,
+            //          children: [
+            //            _recProductItemWidget(),
+            //            _recProductItemWidget(),
+            //            _recProductItemWidget(),
+            //            _recProductItemWidget(),
+            //            _recProductItemWidget(),
+            //            _recProductItemWidget()
+            //          ],
+            //        ),
+            _getHotProductWidget()
+          ],
+        ));
   }
 
   void _getFocusData() async {
