@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/providers/counter.dart';
+import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -14,6 +16,10 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Text("购物车页面");
+    return RaisedButton(
+        child: Text("购物车+1"),
+        onPressed: () {
+          context.read<Counter>().increment();
+        });
   }
 }

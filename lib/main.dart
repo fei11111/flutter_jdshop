@@ -1,8 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/providers/counter.dart';
 import 'package:flutter_jdshop/routers/router.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => Counter())],
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
