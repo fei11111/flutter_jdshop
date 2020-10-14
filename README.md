@@ -23,7 +23,7 @@ samples, guidance on mobile development, and a full API reference.
 #### 轮播图：flutter_swiper
 #### 网络请求：dio
 #### SP存储：shared_preferences
-#### 浏览器:flutter_inappbrowser,模拟器无法使用，后期在优化
+#### 浏览器:flutter_inappwebview
 
 
 #### IndexedStack不能滚动，PageView可以滚动切换

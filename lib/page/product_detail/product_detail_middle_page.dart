@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_jdshop/config/config.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductDetailMiddle extends StatefulWidget {
   final Map arguments;
@@ -23,26 +22,37 @@ class _ProductDetailMiddleState extends State<ProductDetailMiddle>
   @override
   bool get wantKeepAlive => true;
 
-  var _progress = 0.0;
-
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Text("dddd")
-      // _progress < 100
-      //     ? LinearProgressIndicator(minHeight: 2.h, value: _progress)
-      //     : Container(),
-      // Expanded(
-      //     flex: 1,
-      //     child: InAppWebView(
-      //       initialUrl: Config.getProductDetailWeb(widget.arguments["id"]),
-      //       onProgressChanged:
-      //           (InAppWebViewController controller, int progress) {
-      //         setState(() {
-      //           _progress = progress.toDouble();
-      //         });
-      //       },
-      //     ))
+      Expanded(
+        child: Container(
+          margin: const EdgeInsets.all(10.0),
+          decoration:
+              BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+          child: InAppWebView(
+            initialUrl: Config.getProductDetailWeb(widget.arguments['id']),
+            initialHeaders: {},
+            initialOptions: InAppWebViewGroupOptions(
+                crossPlatform: InAppWebViewOptions(
+              debuggingEnabled: true,
+            )),
+            onWebViewCreated: (InAppWebViewController controller) {},
+            onLoadStart: (InAppWebViewController controller, String url) {
+              setState(() {});
+            },
+            onLoadStop: (InAppWebViewController controller, String url) async {
+              setState(() {});
+            },
+            onProgressChanged:
+                (InAppWebViewController controller, int progress) {
+              setState(() {
+                // this.progress = progress / 100;
+              });
+            },
+          ),
+        ),
+      )
     ]);
   }
 }

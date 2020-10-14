@@ -132,13 +132,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.2"
-  flutter_inappbrowser:
+  flutter_inappwebview:
     dependency: "direct main"
     description:
-      name: flutter_inappbrowser
+      name: flutter_inappwebview
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.2"
+    version: "4.0.0+4"
   flutter_page_indicator:
     dependency: transitive
     description:
@@ -198,13 +198,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.16.1"
-  js:
-    dependency: transitive
-    description:
-      name: js
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.6.3-nullsafety.1"
   matcher:
     dependency: transitive
     description:
@@ -370,7 +363,7 @@ packages:
       name: stack_trace
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.10.0-nullsafety.2"
+    version: "1.10.0-nullsafety.1"
   stream_channel:
     dependency: transitive
     description:
@@ -484,5 +477,5 @@ packages:
     source: hosted
     version: "4.5.1"
 sdks:
-  dart: ">=2.10.0-110 <=2.11.0-203.0.dev"
+  dart: ">=2.10.0-110 <2.11.0"
   flutter: ">=1.19.0-4.3.pre <2.0.0"
