@@ -17,6 +17,7 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     debugPrint("cart initState");
+    _allCheck = context.watch<CartProviders>().allCheck;
   }
 
   @override
@@ -46,7 +47,6 @@ class _CartPageState extends State<CartPage> {
                           context.watch<CartProviders>().cartList[index];
                       return InkWell(
                           splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
                           child: CartItemPage(model: model),
                           onTap: () {
                             Navigator.pushNamed(context, '/productDetail',
@@ -97,8 +97,6 @@ class _CartPageState extends State<CartPage> {
   }
 
   void _checkAll() {
-    setState(() {
-      _allCheck = !_allCheck;
-    });
+    context.watch<CartProviders>().checkAll(!_allCheck);
   }
 }
