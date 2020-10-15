@@ -11,13 +11,10 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  bool _allCheck = false;
-
   @override
   void initState() {
     super.initState();
     debugPrint("cart initState");
-    _allCheck = context.watch<CartProviders>().allCheck;
   }
 
   @override
@@ -76,7 +73,7 @@ class _CartPageState extends State<CartPage> {
                       onChanged: (value) {
                         _checkAll();
                       },
-                      value: _allCheck),
+                      value: context.watch<CartProviders>().allCheck),
                   Text("全选")
                 ]),
                 onTap: () {
@@ -97,6 +94,8 @@ class _CartPageState extends State<CartPage> {
   }
 
   void _checkAll() {
-    context.watch<CartProviders>().checkAll(!_allCheck);
+    context
+        .read<CartProviders>()
+        .checkAll(!context.watch<CartProviders>().allCheck);
   }
 }

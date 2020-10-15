@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/config/sp.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
+import 'package:flutter_jdshop/utils/sp_util.dart';
 
 class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
   List<ProductDetailItemModel> _cartList = [];
@@ -8,6 +13,22 @@ class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
   List get cartList => _cartList;
   bool _isAllCheck = false;
   bool get allCheck => _isAllCheck;
+
+  CartProviders() {
+    _init();
+  }
+
+  void _init() async {
+    try {
+      String str = await SPUtil.getString(SP.cartKey);
+      _cartList = json.decode(str);
+    } catch (e) {
+      _cartList = [];
+    }
+    debugPrint("初始化 购物车数量:${_cartList.length}");
+    _isAllCheck = _isAllChecked();
+    notifyListeners();
+  }
 
   void addCart(ProductDetailItemModel value) {
     debugPrint("新增的model：${value.selectedAttr}");
@@ -30,6 +51,7 @@ class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
           count: value.count);
       _cartList.add(model);
     }
+    SPUtil.setString(SP.cartKey, json.encode(_cartList));
     notifyListeners();
   }
 
@@ -37,6 +59,7 @@ class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
     if (_cartList.contains(value)) {
       int index = _cartList.indexOf(value);
       _cartList.removeAt(index);
+      SPUtil.setString(SP.cartKey, json.encode(_cartList));
       notifyListeners();
     }
   }
@@ -46,6 +69,7 @@ class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
       _cartList[i].checked = value;
     }
     _isAllCheck = value;
+    SPUtil.setString(SP.cartKey, json.encode(_cartList));
     notifyListeners();
   }
 
@@ -61,6 +85,7 @@ class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
 
   void itemCheck() {
     _isAllCheck = _isAllChecked();
+    SPUtil.setString(SP.cartKey, json.encode(_cartList));
     notifyListeners();
   }
 }

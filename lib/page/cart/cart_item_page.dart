@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
 import 'package:flutter_jdshop/page/cart/cart_num_page.dart';
+import 'package:flutter_jdshop/providers/cart_providers.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class CartItemPage extends StatefulWidget {
   final ProductDetailItemModel model;
@@ -15,6 +17,7 @@ class CartItemPage extends StatefulWidget {
 
 class _CartItemPageState extends State<CartItemPage> {
   ProductDetailItemModel _model;
+  // CartProviders _cartProviders;
 
   @override
   void initState() {
@@ -24,6 +27,8 @@ class _CartItemPageState extends State<CartItemPage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("cart build");
+    // _cartProviders = Provider.of<CartProviders>(context);
     return Container(
       height: 200.w,
       margin: EdgeInsets.fromLTRB(5.w, 5.h, 5.w, 5.h),
@@ -36,9 +41,8 @@ class _CartItemPageState extends State<CartItemPage> {
           Checkbox(
               value: _model.checked,
               onChanged: (value) {
-                setState(() {
-                  _model.checked = value;
-                });
+                _model.checked = value;
+                // _cartProviders.itemCheck();
               },
               activeColor: Colors.pink),
           Container(
