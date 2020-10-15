@@ -1,12 +1,14 @@
-import 'dart:collection';
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
+import 'package:flutter_jdshop/providers/cart_providers.dart';
+import 'package:flutter_jdshop/utils/event_bus.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailLeft extends StatefulWidget {
   final ProductDetailItemModel itemModel;
@@ -20,7 +22,7 @@ class ProductDetailLeft extends StatefulWidget {
 class _ProductDetailLeftState extends State<ProductDetailLeft>
     with AutomaticKeepAliveClientMixin {
   ProductDetailItemModel _itemModel;
-  List<String> _selectAttrs = [];
+  StreamSubscription eventAction;
 
   @override
   void initState() {
@@ -28,6 +30,20 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
     debugPrint("ProductDetailLeft initState");
     _itemModel = widget.itemModel;
     _initAttrs();
+    _initListener();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    eventAction.cancel();
+  }
+
+  void _initListener() {
+    eventAction = eventBus.on<ProductDetailEvent>().listen((event) {
+      debugPrint(event.str);
+      _showBottomDialog(this.context);
+    });
   }
 
   void _initAttrs() {
@@ -45,16 +61,21 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
   }
 
   void _setSelectAttrs() {
-    _selectAttrs.clear();
+    _itemModel.selectedAttr = "";
     _itemModel.attr.forEach((e) {
       for (int i = 0; i < e.attrList.length; i++) {
         if (e.attrList[i]["checked"] == true) {
-          _selectAttrs.add(e.attrList[i]["title"]);
+          _itemModel.selectedAttr =
+              _itemModel.selectedAttr + e.attrList[i]["title"] + ",";
         }
       }
     });
+    if (_itemModel.selectedAttr.length > 0) {
+      _itemModel.selectedAttr = _itemModel.selectedAttr
+          .substring(0, _itemModel.selectedAttr.length - 1);
+    }
     setState(() {
-      _selectAttrs = _selectAttrs;
+      _itemModel = _itemModel;
     });
   }
 
@@ -138,9 +159,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600)),
                           SizedBox(width: 10.w),
-                          Text(_selectAttrs.length > 0
-                              ? _selectAttrs.toString()
-                              : "")
+                          Text(_itemModel.selectedAttr)
                         ],
                       ),
                       onTap: () {
@@ -238,10 +257,9 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                   alignment: Alignment.bottomCenter,
                   child: CustomButton("确认", Colors.red, () {
                     Navigator.pop(context);
-                    setState(() {
-                      _itemModel.attr = tempAttr;
-                    });
+                    _itemModel.attr = tempAttr;
                     _setSelectAttrs();
+                    context.read<CartProviders>().addCart(_itemModel);
                   }))
             ]);
           });

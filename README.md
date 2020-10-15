@@ -23,8 +23,10 @@ samples, guidance on mobile development, and a full API reference.
 #### 轮播图：flutter_swiper
 #### 网络请求：dio
 #### SP存储：shared_preferences
+#### 显示html代码：flutter_html
 #### 浏览器：flutter_inappwebview
 #### 状态管理：provider
+#### 事件传递：event_bus
 
 
 #### IndexedStack不能滚动，PageView可以滚动切换

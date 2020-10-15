@@ -125,71 +125,74 @@ class _ProductListPageState extends State<ProductListPage>
                   String imageUrl =
                       Config.domain + model.pic.replaceAll("\\", "/");
                   debugPrint(imageUrl);
-                  return Column(
-                    children: [
-                      InkWell(
-                          child: Padding(
-                              padding: EdgeInsets.all(20.w),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 180.w,
-                                    height: 180.h,
-                                    child: Image.network(imageUrl,
-                                        fit: BoxFit.cover),
-                                  ),
-                                  Expanded(
-                                      flex: 1,
-                                      child: Container(
+                  return Container(
+                      decoration: BoxDecoration(color: Colors.white),
+                      child: Column(
+                        children: [
+                          InkWell(
+                              child: Padding(
+                                  padding: EdgeInsets.all(20.w),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 180.w,
                                         height: 180.h,
-                                        margin: EdgeInsets.only(left: 20.w),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(model.title,
-                                                maxLines: 2,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                            Row(
+                                        child: Image.network(imageUrl,
+                                            fit: BoxFit.cover),
+                                      ),
+                                      Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            height: 180.h,
+                                            margin: EdgeInsets.only(left: 20.w),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Chip(
-                                                    label: Text("WIFI",
-                                                        style: TextStyle(
-                                                            fontSize: 20.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400))),
-                                                SizedBox(width: 10.w),
-                                                Chip(
-                                                    label: Text("128g",
-                                                        style: TextStyle(
-                                                            fontSize: 20.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400)))
+                                                Text(model.title,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                                Row(
+                                                  children: [
+                                                    Chip(
+                                                        label: Text("WIFI",
+                                                            style: TextStyle(
+                                                                fontSize: 20.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400))),
+                                                    SizedBox(width: 10.w),
+                                                    Chip(
+                                                        label: Text("128g",
+                                                            style: TextStyle(
+                                                                fontSize: 20.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400)))
+                                                  ],
+                                                ),
+                                                Text(
+                                                  "¥${model.price}",
+                                                  style: TextStyle(
+                                                      color: Colors.red,
+                                                      fontSize: 30.sp),
+                                                )
                                               ],
                                             ),
-                                            Text(
-                                              "¥${model.price}",
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 30.sp),
-                                            )
-                                          ],
-                                        ),
-                                      ))
-                                ],
-                              )),
-                          onTap: () {
-                            Navigator.pushNamed(context, "/productDetail",
-                                arguments: {"id": model.id});
-                          }),
-                      _getBottomWidget(index)
-                    ],
-                  );
+                                          ))
+                                    ],
+                                  )),
+                              onTap: () {
+                                Navigator.pushNamed(context, "/productDetail",
+                                    arguments: {"id": model.id});
+                              }),
+                          _getBottomWidget(index)
+                        ],
+                      ));
                 })
             : NoDataWidget();
   }

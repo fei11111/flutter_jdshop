@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_jdshop/providers/cart.dart';
+import 'package:flutter_jdshop/providers/cart_providers.dart';
 
 class UserPage extends StatefulWidget {
   @override
@@ -18,7 +18,7 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("我的"), elevation: 0.0),
-      body: Text("购物车数量=${context.watch<Cart>().cartNum}"),
+      body: Text("购物车数量=${context.watch<CartProviders>().cartNum}"),
     );
   }
 }

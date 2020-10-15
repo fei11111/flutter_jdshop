@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class ProductDetailModel {
   ProductDetailItemModel result;
 
@@ -60,6 +62,11 @@ class ProductDetailItemModel {
   String subTitle;
   Object salecount;
 
+  //新增
+  int count;
+  String selectedAttr;
+  bool checked;
+
   ProductDetailItemModel(
       {this.id,
       this.title,
@@ -75,28 +82,33 @@ class ProductDetailItemModel {
       this.cname,
       this.attr,
       this.subTitle = "",
-      this.salecount});
+      this.salecount,
+      this.count,
+      this.selectedAttr,
+      this.checked});
 
   factory ProductDetailItemModel.fromJson(Map<String, dynamic> json) {
     return ProductDetailItemModel(
-      id: json['_id'],
-      title: json['title'],
-      cid: json['cid'],
-      price: json['price'],
-      oldPrice: json['old_price'],
-      isBest: json['is_best'],
-      isHot: json['is_hot'],
-      isNew: json['is_new'],
-      status: json['status'],
-      pic: json['pic'],
-      content: json['content'],
-      cname: json['cname'],
-      attr: json['attr'] != null
-          ? json['attr'].map<Attr>((v) => new Attr.fromJson(v)).toList()
-          : null,
-      subTitle: json['sub_title'],
-      salecount: json['salecount'],
-    );
+        id: json['_id'],
+        title: json['title'],
+        cid: json['cid'],
+        price: json['price'],
+        oldPrice: json['old_price'],
+        isBest: json['is_best'],
+        isHot: json['is_hot'],
+        isNew: json['is_new'],
+        status: json['status'],
+        pic: json['pic'],
+        content: json['content'],
+        cname: json['cname'],
+        attr: json['attr'] != null
+            ? json['attr'].map<Attr>((v) => new Attr.fromJson(v)).toList()
+            : null,
+        subTitle: json['sub_title'],
+        salecount: json['salecount'],
+        count: json['count'] == null ? 1 : json['count'],
+        selectedAttr: json['selectedAttr'] == null ? "" : json['selectedAttr'],
+        checked: json['checked'] == null ? false : json['checked']);
   }
 
   Map<String, dynamic> toJson() {
@@ -118,6 +130,23 @@ class ProductDetailItemModel {
     }
     data['sub_title'] = this.subTitle;
     data['salecount'] = this.salecount;
+    data['count'] = this.count;
+    data['selectedAttr'] = this.selectedAttr;
+    data['checked'] = this.checked;
     return data;
   }
+
+  @override
+  bool operator ==(other) {
+    if (other is! ProductDetailItemModel) {
+      return false;
+    }
+    final ProductDetailItemModel model = other;
+    debugPrint("selectedAttr=$selectedAttr");
+    debugPrint("selectedAttr=${model.selectedAttr}");
+    return id == model.id && selectedAttr == model.selectedAttr;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }

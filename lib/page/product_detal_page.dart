@@ -6,6 +6,7 @@ import 'package:flutter_jdshop/page/product_detail/product_detail_right_page.dar
 import 'package:flutter_jdshop/page/product_detail/product_detail_left_page.dart';
 import 'package:flutter_jdshop/page/product_detail/product_detail_middle_page.dart';
 import 'package:flutter_jdshop/page/tabs_page.dart';
+import 'package:flutter_jdshop/utils/event_bus.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_jdshop/widget/loading_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -100,19 +101,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [Icon(Icons.shopping_cart), Text("购物车")]),
-            Positioned(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    CustomButton("加入购物车", Colors.red, () {
-                      debugPrint("加入购物车");
-                    }),
-                    CustomButton("立即购买", Colors.yellow, () {
-                      debugPrint("立即购买");
-                    }),
-                  ],
-                ),
-                right: 0.0)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CustomButton("加入购物车", Colors.red, () {
+                  eventBus.fire(ProductDetailEvent("加入购物车"));
+                }),
+                CustomButton("立即购买", Colors.yellow, () {
+                  eventBus.fire(ProductDetailEvent("立即购买"));
+                }),
+              ],
+            ),
           ],
         ),
       ),
