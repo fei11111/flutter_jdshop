@@ -1,13 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/config/sp.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
 import 'package:flutter_jdshop/utils/sp_util.dart';
 
-class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
+class CartProviders with ChangeNotifier {
   List<ProductDetailItemModel> _cartList = [];
   int get cartNum => _cartList.length;
   List get cartList => _cartList;
@@ -21,7 +19,9 @@ class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
   void _init() async {
     try {
       String str = await SPUtil.getString(SP.cartKey);
-      _cartList = json.decode(str);
+      debugPrint("str=$str");
+      var result = json.decode(str);
+      result.map<ProductDetailItemModel>((v) => new ProductDetailItemModel.fromJson(v)).toList();
     } catch (e) {
       _cartList = [];
     }
@@ -30,7 +30,7 @@ class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void addCart(ProductDetailItemModel value) {
+  void addCart(ProductDetailItemModel value) async {
     debugPrint("新增的model：${value.selectedAttr}");
     if (_cartList.contains(value)) {
       int index = _cartList.indexOf(value);
@@ -51,25 +51,25 @@ class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
           count: value.count);
       _cartList.add(model);
     }
-    SPUtil.setString(SP.cartKey, json.encode(_cartList));
-    notifyListeners();
+    await SPUtil.setString(SP.cartKey, json.encode(_cartList));
+    _init();
   }
 
-  void deleteCart(value) {
+  void deleteCart(value) async {
     if (_cartList.contains(value)) {
       int index = _cartList.indexOf(value);
       _cartList.removeAt(index);
-      SPUtil.setString(SP.cartKey, json.encode(_cartList));
+      await SPUtil.setString(SP.cartKey, json.encode(_cartList));
       notifyListeners();
     }
   }
 
-  void checkAll(bool value) {
+  void checkAll(bool value) async {
     for (int i = 0; i < _cartList.length; i++) {
       _cartList[i].checked = value;
     }
     _isAllCheck = value;
-    SPUtil.setString(SP.cartKey, json.encode(_cartList));
+    await SPUtil.setString(SP.cartKey, json.encode(_cartList));
     notifyListeners();
   }
 
@@ -83,9 +83,9 @@ class CartProviders with ChangeNotifier, DiagnosticableTreeMixin {
     return true;
   }
 
-  void itemCheck() {
+  void itemCheck() async {
     _isAllCheck = _isAllChecked();
-    SPUtil.setString(SP.cartKey, json.encode(_cartList));
+    await SPUtil.setString(SP.cartKey, json.encode(_cartList));
     notifyListeners();
   }
 }
