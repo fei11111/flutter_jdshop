@@ -6,10 +6,13 @@ import 'package:flutter_jdshop/page/product_detail/product_detail_right_page.dar
 import 'package:flutter_jdshop/page/product_detail/product_detail_left_page.dart';
 import 'package:flutter_jdshop/page/product_detail/product_detail_middle_page.dart';
 import 'package:flutter_jdshop/page/tabs_page.dart';
+import 'package:flutter_jdshop/providers/cart_providers.dart';
 import 'package:flutter_jdshop/utils/event_bus.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_jdshop/widget/loading_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 ///商品详情页面
 class ProductDetailPage extends StatefulWidget {
@@ -105,10 +108,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 CustomButton("加入购物车", Colors.red, () {
-                  eventBus.fire(ProductDetailEvent("加入购物车"));
+                  if (_itemModel.attr.length > 0) {
+                    ///说明有款式可以选，弹出选择框，不然就直接提示加入购物车
+                    eventBus.fire(ProductDetailEvent(
+                        "加入购物车", ProductDetailType.ADD_CART));
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: '加入购物车成功',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                    );
+                    context.read<CartProviders>().addCart(_itemModel);
+                  }
                 }),
                 CustomButton("立即购买", Colors.yellow, () {
-                  eventBus.fire(ProductDetailEvent("立即购买"));
+                  if (_itemModel.attr.length > 0) {
+                    ///说明有款式可以选，弹出选择框，不然就直接提示加入购物车
+                    eventBus.fire(
+                        ProductDetailEvent("立即购买", ProductDetailType.MUST_BUY));
+                  } else {}
                 }),
               ],
             ),

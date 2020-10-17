@@ -5,6 +5,7 @@ import 'package:flutter_jdshop/page/tabs/home_page.dart';
 import 'package:flutter_jdshop/page/tabs/user_page.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_jdshop/utils/event_bus.dart';
 
 class TabsPage extends StatefulWidget {
   @override
@@ -20,12 +21,23 @@ class _TabsPageState extends State<TabsPage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
+    initListener();
+  }
+
+  void initListener() {
     _pageController.addListener(() {
       int page = _pageController.page.toInt();
       if (page != _currentIndex)
         setState(() {
           _currentIndex = page;
         });
+    });
+    eventBus.on<ProductDetailEvent>().listen((event) {
+      if (event.type == ProductDetailType.TO_SHOPPING) {
+        setState(() {
+          _pageController.jumpToPage(0);
+        });
+      }
     });
   }
 

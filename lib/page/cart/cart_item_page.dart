@@ -3,8 +3,10 @@ import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
 import 'package:flutter_jdshop/page/cart/cart_num_page.dart';
 import 'package:flutter_jdshop/providers/cart_providers.dart';
+import 'package:flutter_jdshop/widget/custom_tip_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CartItemPage extends StatefulWidget {
   final ProductDetailItemModel model;
@@ -17,18 +19,19 @@ class CartItemPage extends StatefulWidget {
 
 class _CartItemPageState extends State<CartItemPage> {
   ProductDetailItemModel _model;
-  // CartProviders _cartProviders;
 
   @override
   void initState() {
     super.initState();
-    _model = widget.model;
+    debugPrint("cart item init");
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("cart build");
-    // _cartProviders = Provider.of<CartProviders>(context);
+    ///放在这里是因为要实时从父类那数据
+    _model = widget.model;
+    debugPrint("cart item build");
+    debugPrint("cart item 商品:${_model.title}");
     return Container(
       height: 200.w,
       margin: EdgeInsets.fromLTRB(5.w, 5.h, 5.w, 5.h),
@@ -42,7 +45,7 @@ class _CartItemPageState extends State<CartItemPage> {
               value: _model.checked,
               onChanged: (value) {
                 _model.checked = value;
-                // _cartProviders.itemCheck();
+                context.read<CartProviders>().itemCheck();
               },
               activeColor: Colors.pink),
           Container(
@@ -62,13 +65,38 @@ class _CartItemPageState extends State<CartItemPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                            child: Text(_model.title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 26.sp))),
+                            height: 70.h,
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child: Text(_model.title,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(fontSize: 26.sp))),
+                                IconButton(
+                                    icon: Icon(Icons.delete_outline,
+                                        color: Colors.black54),
+                                    onPressed: () {
+                                      showCustomTipDialog(context, "提示",
+                                          "是否确认删除该商品？", "取消", "确认", () {}, () {
+                                        context
+                                            .read<CartProviders>()
+                                            .deleteCart(_model);
+                                        Fluttertoast.showToast(
+                                            msg: "删除成功",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER);
+                                      });
+                                    })
+                              ],
+                            )),
                         Container(
+                            height: 30.h,
                             child: Text("款式：${_model.selectedAttr}",
-                                maxLines: 2,
+                                maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(color: Colors.blue))),
                         Row(

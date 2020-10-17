@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
 import 'package:flutter_jdshop/page/cart/cart_item_page.dart';
 import 'package:flutter_jdshop/providers/cart_providers.dart';
+import 'package:flutter_jdshop/widget/custom_tip_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_jdshop/utils/event_bus.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -19,40 +22,73 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("cart build");
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: Text("购物车"),
           elevation: 0.0,
           actions: [
-            IconButton(
-                icon: Icon(Icons.launch),
+            FlatButton(
+                child: Text("删除"),
                 onPressed: () {
-                  debugPrint("分享");
+                  ///小于等于0，说明没有勾选
+                  if (context.read<CartProviders>().AllPrice <= 0) {
+                    return;
+                  }
+                  showCustomTipDialog(
+                      context, "提示", "是否确认删除勾选的商品？", "取消", "确认", () {}, () {
+                    context.read<CartProviders>().deleteCartByChecked();
+                    Fluttertoast.showToast(
+                        msg: "删除成功",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER);
+                  });
                 })
           ],
         ),
-        body: Stack(
-          children: [
-            Padding(
-                padding: EdgeInsets.only(bottom: 78.h),
-                child: ListView.builder(
-                    itemCount: context.watch<CartProviders>().cartNum,
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      ProductDetailItemModel model =
-                          context.watch<CartProviders>().cartList[index];
-                      return InkWell(
-                          splashColor: Colors.transparent,
-                          child: CartItemPage(model: model),
-                          onTap: () {
-                            Navigator.pushNamed(context, '/productDetail',
-                                arguments: {"id": model.id});
-                          });
-                    })),
-            Align(alignment: Alignment.bottomCenter, child: _getBalanceWidget())
-          ],
-        ));
+        body: context.watch<CartProviders>().cartNum > 0
+            ? Stack(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 78.h),
+                      child: ListView.builder(
+                          itemCount: context.watch<CartProviders>().cartNum,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            ProductDetailItemModel model =
+                                context.watch<CartProviders>().cartList[index];
+                            debugPrint("商品:${model.title}");
+                            return InkWell(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                child: CartItemPage(model: model),
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/productDetail',
+                                      arguments: {"id": model.id});
+                                });
+                          })),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: _getBalanceWidget())
+                ],
+              )
+            : Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                    Text("购物车空空如也...",
+                        style:
+                            TextStyle(fontSize: 30.sp, color: Colors.black38)),
+                    SizedBox(height: 10.h),
+                    RaisedButton(
+                        child: Text("去购物"),
+                        onPressed: () {
+                          eventBus.fire(ProductDetailEvent(
+                              "去购物", ProductDetailType.TO_SHOPPING));
+                        })
+                  ])));
   }
 
   Widget _getBalanceWidget() {
@@ -79,23 +115,31 @@ class _CartPageState extends State<CartPage> {
                 onTap: () {
                   _checkAll();
                 }),
-            InkWell(
-                onTap: () {
-                  debugPrint("结算");
-                },
-                child: Container(
-                    alignment: Alignment.center,
-                    height: double.infinity,
-                    decoration: BoxDecoration(color: Colors.red),
-                    padding: EdgeInsets.fromLTRB(30.w, 10.h, 30.w, 10.h),
-                    child: Text("结算", style: TextStyle(color: Colors.white))))
+            Row(
+              children: [
+                Text("合计:￥${context.watch<CartProviders>().AllPrice}",
+                    style: TextStyle(color: Colors.red, fontSize: 30.sp)),
+                SizedBox(width: 20.w),
+                InkWell(
+                    onTap: () {
+                      debugPrint("结算");
+                    },
+                    child: Container(
+                        alignment: Alignment.center,
+                        height: double.infinity,
+                        decoration: BoxDecoration(color: Colors.red),
+                        padding: EdgeInsets.fromLTRB(45.w, 10.h, 45.w, 10.h),
+                        child:
+                            Text("结算", style: TextStyle(color: Colors.white))))
+              ],
+            )
           ],
         ));
   }
 
   void _checkAll() {
-    context
-        .read<CartProviders>()
-        .checkAll(!context.watch<CartProviders>().allCheck);
+    bool allCheck = context.read<CartProviders>().allCheck;
+    debugPrint("全选:$allCheck");
+    context.read<CartProviders>().checkAll(!allCheck);
   }
 }

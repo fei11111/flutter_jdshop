@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
+import 'package:flutter_jdshop/providers/cart_providers.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class CartNumPage extends StatefulWidget {
   final ProductDetailItemModel model;
@@ -28,18 +30,20 @@ class _CartNumPageState extends State<CartNumPage> {
         decoration:
             BoxDecoration(border: Border.all(color: Colors.black12, width: 1)),
         child: Row(
-          children: [_getLeftWidget(), _getMiddleWidget(), _getRightWidget()],
+          children: [
+            _getLeftWidget(context),
+            _getMiddleWidget(),
+            _getRightWidget(context)
+          ],
         ));
   }
 
-  Widget _getLeftWidget() {
+  Widget _getLeftWidget(BuildContext context) {
     return InkWell(
         onTap: () {
           if (_model.count == 1) return;
           _model.count--;
-          setState(() {
-            _model = _model;
-          });
+          context.read<CartProviders>().itemCheck();
         },
         child: Container(
             alignment: Alignment.center,
@@ -61,13 +65,11 @@ class _CartNumPageState extends State<CartNumPage> {
     );
   }
 
-  Widget _getRightWidget() {
+  Widget _getRightWidget(BuildContext context) {
     return InkWell(
         onTap: () {
           _model.count++;
-          setState(() {
-            _model = _model;
-          });
+          context.read<CartProviders>().itemCheck();
         },
         child: Container(
             alignment: Alignment.center,

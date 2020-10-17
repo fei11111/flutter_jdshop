@@ -8,6 +8,7 @@ import 'package:flutter_jdshop/providers/cart_providers.dart';
 import 'package:flutter_jdshop/utils/event_bus.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailLeft extends StatefulWidget {
@@ -260,6 +261,10 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                     _itemModel.attr = tempAttr;
                     _setSelectAttrs();
                     context.read<CartProviders>().addCart(_itemModel);
+                    Fluttertoast.showToast(
+                        msg: "加入购物车成功",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER);
                   }))
             ]);
           });
