@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/page/tabs/cart_page.dart';
 import 'package:flutter_jdshop/page/tabs/category_page.dart';
@@ -16,10 +18,12 @@ class _TabsPageState extends State<TabsPage> {
   List<Widget> _pageList = [HomePage(), CategoryPage(), CartPage(), UserPage()];
   var _currentIndex = 0;
   PageController _pageController;
+  StreamSubscription _productDetailAction;
 
   @override
   void initState() {
     super.initState();
+    debugPrint("tab initState");
     _pageController = PageController(initialPage: _currentIndex);
     initListener();
   }
@@ -32,7 +36,7 @@ class _TabsPageState extends State<TabsPage> {
           _currentIndex = page;
         });
     });
-    eventBus.on<ProductDetailEvent>().listen((event) {
+    _productDetailAction = eventBus.on<ProductDetailEvent>().listen((event) {
       if (event.type == ProductDetailType.TO_SHOPPING) {
         setState(() {
           _pageController.jumpToPage(0);
@@ -43,7 +47,9 @@ class _TabsPageState extends State<TabsPage> {
 
   @override
   void dispose() {
+    debugPrint("tab dispose");
     _pageController?.dispose();
+    _productDetailAction.cancel();
     super.dispose();
   }
 
@@ -91,6 +97,7 @@ class _TabsPageState extends State<TabsPage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("tab build");
     ScreenUtil.init(context,
         designSize: Size(750, 1334), allowFontScaling: false);
     return Scaffold(

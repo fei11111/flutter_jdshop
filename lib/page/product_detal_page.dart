@@ -62,18 +62,22 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             onPressed: () {
               showMenu(
                   context: context,
-                  position: RelativeRect.fromLTRB(ScreenUtil().screenWidth,
-                      ScreenUtil().statusBarHeight + kToolbarHeight, 0, 0),
+                  position: RelativeRect.fromLTRB(
+                      ScreenUtil().screenWidth, kToolbarHeight, 0, 0),
                   items: [
                     PopupMenuItem(
+                        value: "111111111",
                         child: FlatButton(
                             child: Text("首页"),
                             onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) => TabsPage()),
-                                  (route) => route == null);
+                              // Navigator.pushAndRemoveUntil(
+                              //     context,
+                              //     new MaterialPageRoute(
+                              //         builder: (context) => TabsPage()),
+                              //     (route) => route == null);
+                              Navigator.pop(context);
+                              eventBus.fire(ProductDetailEvent(
+                                  "去购物", ProductDetailType.TO_SHOPPING));
                             })),
                     PopupMenuItem(
                         child: FlatButton(

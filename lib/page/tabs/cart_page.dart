@@ -8,6 +8,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_jdshop/utils/event_bus.dart';
 
+import '../tabs_page.dart';
+
 class CartPage extends StatefulWidget {
   @override
   _CartPageState createState() => _CartPageState();
@@ -87,6 +89,11 @@ class _CartPageState extends State<CartPage> {
                         onPressed: () {
                           eventBus.fire(ProductDetailEvent(
                               "去购物", ProductDetailType.TO_SHOPPING));
+                          // Navigator.pushAndRemoveUntil(
+                          //     context,
+                          //     new MaterialPageRoute(
+                          //         builder: (context) => TabsPage()),
+                          //     (route) => route == null);
                         })
                   ])));
   }

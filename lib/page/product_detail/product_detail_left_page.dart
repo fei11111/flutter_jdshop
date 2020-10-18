@@ -10,6 +10,7 @@ import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'cart_num_page.dart';
 
 class ProductDetailLeft extends StatefulWidget {
   final ProductDetailItemModel itemModel;
@@ -23,13 +24,15 @@ class ProductDetailLeft extends StatefulWidget {
 class _ProductDetailLeftState extends State<ProductDetailLeft>
     with AutomaticKeepAliveClientMixin {
   ProductDetailItemModel _itemModel;
-  StreamSubscription eventAction;
+  StreamSubscription _eventAction;
+  ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     debugPrint("ProductDetailLeft initState");
     _itemModel = widget.itemModel;
+    _scrollController = ScrollController();
     _initAttrs();
     _initListener();
   }
@@ -37,13 +40,17 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
   @override
   void dispose() {
     super.dispose();
-    eventAction.cancel();
+    _eventAction.cancel();
   }
 
   void _initListener() {
-    eventAction = eventBus.on<ProductDetailEvent>().listen((event) {
+    _eventAction = eventBus.on<ProductDetailEvent>().listen((event) {
       debugPrint(event.str);
-      _showBottomDialog(this.context);
+      if (event.type != ProductDetailType.TO_SHOPPING) {
+        _showBottomDialog(this.context);
+      } else {
+        eventBus.fire(event);
+      }
     });
   }
 
@@ -152,20 +159,16 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                       border: Border(
                           bottom: BorderSide(
                               color: Color.fromRGBO(233, 233, 233, 0.8)))),
-                  child: InkWell(
-                      child: Row(
-                        children: [
-                          Text("已选:",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600)),
-                          SizedBox(width: 10.w),
-                          Text(_itemModel.selectedAttr)
-                        ],
-                      ),
-                      onTap: () {
-                        _showBottomDialog(context);
-                      })),
+                  child: Row(
+                    children: [
+                      Text("已选:",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600)),
+                      SizedBox(width: 10.w),
+                      Text(_itemModel.selectedAttr)
+                    ],
+                  )),
               Container(
                   height: 80.h,
                   padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
@@ -211,48 +214,87 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                   margin: EdgeInsets.only(bottom: 90.h),
                   child: Padding(
                     padding: EdgeInsets.all(10.w),
-                    child: ListView.builder(
-                      itemCount: tempAttr.length,
-                      itemBuilder: (context, index) {
-                        return Row(children: [
-                          Text("${tempAttr[index].cate}:"),
-                          Wrap(
-                            children: tempAttr[index].attrList.map((e) {
-                              return Container(
-                                  margin: EdgeInsets.only(left: 20.w),
-                                  child: InkWell(
-                                      highlightColor: Colors.transparent,
-                                      splashColor: Colors.transparent,
-                                      child: Chip(
-                                          label: Text(e["title"],
-                                              style: TextStyle(
-                                                  color: e["checked"] == true
-                                                      ? Colors.white
-                                                      : Colors.black)),
-                                          padding: EdgeInsets.all(10.w),
-                                          backgroundColor: e["checked"] == true
-                                              ? Colors.red
-                                              : Color.fromRGBO(
-                                                  233, 233, 233, 0.8)),
-                                      onTap: () {
-                                        tempAttr[index]
-                                            .attrList
-                                            .forEach((element) {
-                                          if (element["title"] == e["title"]) {
-                                            element["checked"] = true;
-                                          } else {
-                                            element["checked"] = false;
-                                          }
-                                        });
-                                        dialogSetState(() {
-                                          tempAttr = tempAttr;
-                                        });
-                                      }));
-                            }).toList(),
-                          )
-                        ]);
-                      },
-                    ),
+                    child: Scrollbar(
+                        controller: _scrollController,
+                        isAlwaysShown: true,
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: tempAttr.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(children: [
+                                    Text("${tempAttr[index].cate}:"),
+                                    Wrap(
+                                      children:
+                                          tempAttr[index].attrList.map((e) {
+                                        return Container(
+                                            // width: 120.w,
+                                            // height: 300.h,
+                                            margin: EdgeInsets.only(left: 20.w),
+                                            child: InkWell(
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                splashColor: Colors.transparent,
+                                                child: Chip(
+                                                    label: Text(e["title"],
+                                                        style: TextStyle(
+                                                            color:
+                                                                e["checked"] ==
+                                                                        true
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black)),
+                                                    padding:
+                                                        EdgeInsets.all(10.w),
+                                                    backgroundColor:
+                                                        e["checked"] == true
+                                                            ? Colors.red
+                                                            : Color.fromRGBO(
+                                                                233,
+                                                                233,
+                                                                233,
+                                                                0.8)),
+                                                onTap: () {
+                                                  tempAttr[index]
+                                                      .attrList
+                                                      .forEach((element) {
+                                                    if (element["title"] ==
+                                                        e["title"]) {
+                                                      element["checked"] = true;
+                                                    } else {
+                                                      element["checked"] =
+                                                          false;
+                                                    }
+                                                  });
+                                                  dialogSetState(() {
+                                                    tempAttr = tempAttr;
+                                                  });
+                                                }));
+                                      }).toList(),
+                                    ),
+                                  ]),
+                                  index == tempAttr.length - 1
+                                      ? Container(
+                                          alignment: Alignment.centerRight,
+                                          padding: EdgeInsets.only(top: 20.h),
+                                          margin: EdgeInsets.only(top: 10.h),
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  top: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.black12))),
+                                          child: Row(children: [
+                                            Text("数量:"),
+                                            SizedBox(width: 20.w),
+                                            CartNumPage(model: _itemModel)
+                                          ]))
+                                      : SizedBox(height: 0)
+                                ]);
+                          },
+                        )),
                   )),
               Align(
                   alignment: Alignment.bottomCenter,

@@ -44,7 +44,7 @@ class CartProviders with ChangeNotifier {
       int index = _cartList.indexOf(value);
       ProductDetailItemModel model = _cartList[index];
       debugPrint("获取得到list该产品数量为${model.count},${model.selectedAttr}");
-      model.count++;
+      model.count = value.count + model.count;
       _cartList[index] = model;
       debugPrint("+1之后该产品数量为${_cartList[index].count}");
       debugPrint("购物车列表数量为${_cartList.length}");
