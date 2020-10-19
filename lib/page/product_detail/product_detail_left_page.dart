@@ -298,16 +298,19 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                   )),
               Align(
                   alignment: Alignment.bottomCenter,
-                  child: CustomButton("确认", Colors.red, () {
-                    Navigator.pop(context);
-                    _itemModel.attr = tempAttr;
-                    _setSelectAttrs();
-                    context.read<CartProviders>().addCart(_itemModel);
-                    Fluttertoast.showToast(
-                        msg: "加入购物车成功",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER);
-                  }))
+                  child: CustomButton(
+                      buttonText: "确认",
+                      buttonColor: Colors.red,
+                      tap: () {
+                        Navigator.pop(context);
+                        _itemModel.attr = tempAttr;
+                        _setSelectAttrs();
+                        context.read<CartProviders>().addCart(_itemModel);
+                        Fluttertoast.showToast(
+                            msg: "加入购物车成功",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER);
+                      }))
             ]);
           });
         });

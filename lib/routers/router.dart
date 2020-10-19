@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/page/login_page.dart';
 import 'package:flutter_jdshop/page/product_detal_page.dart';
 import 'package:flutter_jdshop/page/product_list_page.dart';
 import '../page/search_page.dart';
@@ -18,7 +19,10 @@ final routes = {
 
   ///商品详情页面
   '/productDetail': (context, {arguments}) =>
-      ProductDetailPage(arguments: arguments)
+      ProductDetailPage(arguments: arguments),
+
+  ///登录
+  '/login': (context) => LoginPage()
 };
 
 //固定写法

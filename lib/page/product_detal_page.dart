@@ -111,27 +111,33 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                CustomButton("加入购物车", Colors.red, () {
-                  if (_itemModel.attr.length > 0) {
-                    ///说明有款式可以选，弹出选择框，不然就直接提示加入购物车
-                    eventBus.fire(ProductDetailEvent(
-                        "加入购物车", ProductDetailType.ADD_CART));
-                  } else {
-                    Fluttertoast.showToast(
-                      msg: '加入购物车成功',
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                    );
-                    context.read<CartProviders>().addCart(_itemModel);
-                  }
-                }),
-                CustomButton("立即购买", Colors.yellow, () {
-                  if (_itemModel.attr.length > 0) {
-                    ///说明有款式可以选，弹出选择框，不然就直接提示加入购物车
-                    eventBus.fire(
-                        ProductDetailEvent("立即购买", ProductDetailType.MUST_BUY));
-                  } else {}
-                }),
+                CustomButton(
+                    buttonText: "加入购物车",
+                    buttonColor: Colors.red,
+                    tap: () {
+                      if (_itemModel.attr.length > 0) {
+                        ///说明有款式可以选，弹出选择框，不然就直接提示加入购物车
+                        eventBus.fire(ProductDetailEvent(
+                            "加入购物车", ProductDetailType.ADD_CART));
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: '加入购物车成功',
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                        );
+                        context.read<CartProviders>().addCart(_itemModel);
+                      }
+                    }),
+                CustomButton(
+                    buttonText: "立即购买",
+                    buttonColor: Colors.yellow,
+                    tap: () {
+                      if (_itemModel.attr.length > 0) {
+                        ///说明有款式可以选，弹出选择框，不然就直接提示加入购物车
+                        eventBus.fire(ProductDetailEvent(
+                            "立即购买", ProductDetailType.MUST_BUY));
+                      } else {}
+                    }),
               ],
             ),
           ],

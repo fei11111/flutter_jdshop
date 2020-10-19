@@ -28,29 +28,33 @@ class _UserPageState extends State<UserPage> {
                   image: DecorationImage(
                       image: AssetImage('images/user_bg.jpg'),
                       fit: BoxFit.cover)),
-              child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 20.w, right: 20.w),
-                    width: 100.w,
-                    height: 100.h,
-                    child: CircleAvatar(
-                        backgroundImage: AssetImage('images/user.png')),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
+              child: InkWell(
+                  child: Row(
                     children: [
-                      Text("用户名：124124125",
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 32.sp)),
-                      Text("普通会员",
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 24.sp))
+                      Container(
+                        margin: EdgeInsets.only(left: 20.w, right: 20.w),
+                        width: 100.w,
+                        height: 100.h,
+                        child: CircleAvatar(
+                            backgroundImage: AssetImage('images/user.png')),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("用户名：124124125",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 32.sp)),
+                          Text("普通会员",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 24.sp))
+                        ],
+                      )
                     ],
-                  )
-                ],
-              )),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/login');
+                  })),
           ListTile(
               leading: Icon(Icons.assignment, color: Colors.red),
               title: Text("全部订单")),
