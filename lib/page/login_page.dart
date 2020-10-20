@@ -13,6 +13,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0.0,
           centerTitle: true,
           title: Text("登录"),
           actions: [
@@ -52,21 +53,27 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 FlatButton(
+                  padding: EdgeInsets.zero,
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   child: Text("忘记密码"),
                   onPressed: () {},
                 ),
                 FlatButton(
+                  padding: EdgeInsets.zero,
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   child: Text("新用户注册"),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/registerFirst');
+                  },
                 )
               ],
             ),
             CustomButton(
-                buttonText: "登录", buttonColor: Colors.red, margin: 20.w)
+                buttonText: "登录",
+                buttonColor: Colors.red,
+                margin: EdgeInsets.all(30.w))
           ],
         ));
   }

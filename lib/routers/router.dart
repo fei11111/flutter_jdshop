@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/page/login_page.dart';
 import 'package:flutter_jdshop/page/product_detal_page.dart';
 import 'package:flutter_jdshop/page/product_list_page.dart';
+import 'package:flutter_jdshop/page/register/register_first_page.dart';
+import 'package:flutter_jdshop/page/register/register_second_page.dart';
+import 'package:flutter_jdshop/page/register/register_third_page.dart';
+
 import '../page/search_page.dart';
 import '../page/tabs_page.dart';
 
@@ -22,7 +26,16 @@ final routes = {
       ProductDetailPage(arguments: arguments),
 
   ///登录
-  '/login': (context) => LoginPage()
+  '/login': (context) => LoginPage(),
+
+  ///注册1
+  '/registerFirst': (context) => RegisterFirstPage(),
+
+  ///注册2
+  '/registerSecond': (context) => RegisterSecondPage(),
+
+  ///注册2
+  '/registerThird': (context) => RegisterThirdPage(),
 };
 
 //固定写法

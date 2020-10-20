@@ -6,7 +6,7 @@ class CustomButton extends StatelessWidget {
   final Color buttonColor;
   final Function tap;
   final double height;
-  final double margin;
+  final EdgeInsetsGeometry margin;
 
   CustomButton(
       {Key key,
@@ -24,7 +24,7 @@ class CustomButton extends StatelessWidget {
         splashColor: Colors.transparent,
         child: Container(
             height: height != null ? height : 68.h,
-            margin: EdgeInsets.all(margin == null ? 10.w : margin),
+            margin: margin == null ? EdgeInsets.all(10.w) : margin,
             alignment: Alignment.center,
             padding: EdgeInsets.only(
                 left: 30.w, right: 30.w, top: 10.h, bottom: 10.h),
