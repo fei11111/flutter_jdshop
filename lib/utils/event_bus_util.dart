@@ -12,6 +12,14 @@ class ProductDetailEvent {
   }
 }
 
+class UserEvent{
+  String str;
+
+  UserEvent(String str) {
+    this.str = str;
+  }
+}
+
 enum ProductDetailType {
   ///加入购物车
   ADD_CART,

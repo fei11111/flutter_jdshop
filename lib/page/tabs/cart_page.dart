@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
 import 'package:flutter_jdshop/page/cart/cart_item_page.dart';
 import 'package:flutter_jdshop/providers/cart_providers.dart';
+import 'package:flutter_jdshop/utils/event_bus_util.dart';
+import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_tip_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_jdshop/utils/event_bus.dart';
-
-import '../tabs_page.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -41,10 +39,7 @@ class _CartPageState extends State<CartPage> {
                   showCustomTipDialog(
                       context, "提示", "是否确认删除勾选的商品？", "取消", "确认", () {}, () {
                     context.read<CartProviders>().deleteCartByChecked();
-                    Fluttertoast.showToast(
-                        msg: "删除成功",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER);
+                    toastShort("删除成功");
                   });
                 })
           ],

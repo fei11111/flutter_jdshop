@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 ///自定义输入框
 class CustomTextField extends StatelessWidget {
@@ -8,6 +9,8 @@ class CustomTextField extends StatelessWidget {
   final ValueChanged<String> onChange;
   final BoxBorder border;
   final EdgeInsetsGeometry margin;
+  final int maxLength;
+  final TextInputType keyboardType;
 
   const CustomTextField(
       {Key key,
@@ -15,7 +18,9 @@ class CustomTextField extends StatelessWidget {
       this.password = false,
       this.onChange,
       this.border,
-      this.margin})
+      this.margin,
+      this.maxLength,
+      this.keyboardType})
       : super(key: key);
 
   @override
@@ -31,9 +36,13 @@ class CustomTextField extends StatelessWidget {
                 ? Border(bottom: BorderSide(width: 1.w, color: Colors.black12))
                 : border),
         child: TextField(
+            maxLength: maxLength == null ? kMaxValue : maxLength,
             obscureText: password,
+            keyboardType:
+                keyboardType == null ? TextInputType.text : keyboardType,
             textAlignVertical: TextAlignVertical.bottom,
             decoration: InputDecoration(
+                counterText: "", //此处控制最大字符是否显示
                 hintText: text,
                 border: OutlineInputBorder(
                     borderSide: BorderSide.none,

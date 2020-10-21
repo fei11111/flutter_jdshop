@@ -32,10 +32,12 @@ final routes = {
   '/registerFirst': (context) => RegisterFirstPage(),
 
   ///注册2
-  '/registerSecond': (context) => RegisterSecondPage(),
+  '/registerSecond': (context, {arguments}) =>
+      RegisterSecondPage(arguments: arguments),
 
   ///注册2
-  '/registerThird': (context) => RegisterThirdPage(),
+  '/registerThird': (context, {arguments}) =>
+      RegisterThirdPage(arguments: arguments),
 };
 
 //固定写法

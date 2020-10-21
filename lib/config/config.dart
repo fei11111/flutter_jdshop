@@ -48,4 +48,29 @@ class Config {
   static String getProductDetailWeb(String id) {
     return Config.domain + "pcontent?id=$id";
   }
+
+  ///发送验证码
+  static String getCode() {
+    return Config.domain + "api/sendCode";
+  }
+
+  ///验证手机号码
+  static String getPhoneExp() {
+    return r"^[1][2,3,4,5,6,7,8,9][0-9]{9}$";
+  }
+
+  ///验证码
+  static String getValidateCode() {
+    return Config.domain + "api/validateCode";
+  }
+
+  ///注册
+  static String getRegister() {
+    return Config.domain + "api/register";
+  }
+
+  ///登录
+  static String getLogin() {
+    return Config.domain + "api/doLogin";
+  }
 }

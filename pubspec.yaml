@@ -58,10 +58,13 @@ flutter:
   assets:
     - images/user.png
     - images/user_bg.jpg
+    - images/login.png
     - images/2.0x/user.png
     - images/2.0x/user_bg.jpg
+    - images/2.0x/login.png
     - images/3.0x/user.png
     - images/3.0x/user_bg.jpg
+    - images/3.0x/login.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/config/sp.dart';
 import 'package:flutter_jdshop/utils/sp_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -8,7 +9,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final String SP_KEY = "searchList";
   var _keyWords;
 
   @override
@@ -18,11 +18,11 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void _getHistorySearchData() async {
-    List<String> list = await SPUtil.getStringList(SP_KEY);
+    List<String> list = await SPUtil.getStringList(SP.searchKey);
     if (list == null) {
       list = [];
     }
-    await SPUtil.setStringList(SP_KEY, list);
+    await SPUtil.setStringList(SP.searchKey, list);
     setState(() {
       _historySearchList = list;
     });
@@ -80,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
                       arguments: {"keyWords": _keyWords});
                   if (!_historySearchList.contains(_keyWords)) {
                     _historySearchList.add(_keyWords);
-                    SPUtil.setStringList(SP_KEY, _historySearchList);
+                    SPUtil.setStringList(SP.searchKey, _historySearchList);
                     setState(() {
                       _historySearchList = _historySearchList;
                     });
@@ -150,7 +150,7 @@ class _SearchPageState extends State<SearchPage> {
                   onPressed: () {
                     if (_historySearchList.contains(keyWord)) {
                       _historySearchList.remove(keyWord);
-                      SPUtil.setStringList(SP_KEY, _historySearchList);
+                      SPUtil.setStringList(SP.searchKey, _historySearchList);
                     }
                     setState(() {
                       _historySearchList = _historySearchList;
@@ -173,7 +173,7 @@ class _SearchPageState extends State<SearchPage> {
               BorderSide(color: Color.fromRGBO(233, 233, 233, 0.8), width: 2.w),
           onPressed: () async {
             _historySearchList.clear();
-            if (await SPUtil.remove(SP_KEY)) {
+            if (await SPUtil.remove(SP.searchKey)) {
               setState(() {
                 _historySearchList = _historySearchList;
               });

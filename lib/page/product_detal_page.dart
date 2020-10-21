@@ -5,13 +5,12 @@ import 'package:flutter_jdshop/models/product_detail_model.dart';
 import 'package:flutter_jdshop/page/product_detail/product_detail_right_page.dart';
 import 'package:flutter_jdshop/page/product_detail/product_detail_left_page.dart';
 import 'package:flutter_jdshop/page/product_detail/product_detail_middle_page.dart';
-import 'package:flutter_jdshop/page/tabs_page.dart';
 import 'package:flutter_jdshop/providers/cart_providers.dart';
-import 'package:flutter_jdshop/utils/event_bus.dart';
+import 'package:flutter_jdshop/utils/event_bus_util.dart';
+import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_jdshop/widget/loading_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 ///商品详情页面
@@ -120,11 +119,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         eventBus.fire(ProductDetailEvent(
                             "加入购物车", ProductDetailType.ADD_CART));
                       } else {
-                        Fluttertoast.showToast(
-                          msg: '加入购物车成功',
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                        );
+                        toastShort('加入购物车成功');
                         context.read<CartProviders>().addCart(_itemModel);
                       }
                     }),

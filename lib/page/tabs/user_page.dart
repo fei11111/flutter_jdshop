@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/config/sp.dart';
+import 'package:flutter_jdshop/models/user_info.dart';
+import 'package:flutter_jdshop/utils/event_bus_util.dart';
+import 'package:flutter_jdshop/utils/sp_util.dart';
+import 'package:flutter_jdshop/utils/toast_util.dart';
+import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:convert';
 
 class UserPage extends StatefulWidget {
   @override
@@ -7,10 +14,32 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  UserInfo _userInfo;
+
   @override
   void initState() {
     super.initState();
     debugPrint("user initState");
+    _initListener();
+    _getUserInfo();
+  }
+
+  void _initListener() {
+    eventBus.on<UserEvent>().listen((event) {
+      toastShort(event.str);
+      _getUserInfo();
+    });
+  }
+
+  void _getUserInfo() async {
+    String str = await SPUtil.getString(SP.userInfoKey);
+    UserInfo userInfo;
+    if (str != null) {
+      userInfo = UserInfo.fromJson(json.decode(str));
+    }
+    setState(() {
+      _userInfo = userInfo;
+    });
   }
 
   @override
@@ -38,22 +67,28 @@ class _UserPageState extends State<UserPage> {
                         child: CircleAvatar(
                             backgroundImage: AssetImage('images/user.png')),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("用户名：124124125",
+                      _userInfo != null
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("用户名：${_userInfo.username}",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 30.sp)),
+                                Text("普通会员",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 24.sp))
+                              ],
+                            )
+                          : Text("请登录",
                               style: TextStyle(
-                                  color: Colors.white, fontSize: 32.sp)),
-                          Text("普通会员",
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 24.sp))
-                        ],
-                      )
+                                  color: Colors.white, fontSize: 30.sp))
                     ],
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, '/login');
+                    if (_userInfo == null) {
+                      Navigator.pushNamed(context, '/login');
+                    }
                   })),
           ListTile(
               leading: Icon(Icons.assignment, color: Colors.red),
@@ -77,7 +112,20 @@ class _UserPageState extends State<UserPage> {
           ListTile(
               leading: Icon(Icons.people, color: Colors.black54),
               title: Text("在线客服")),
-          Divider(),
+          Container(
+              width: double.infinity,
+              height: 50.h,
+              color: Color.fromRGBO(242, 242, 242, 0.9)),
+          _userInfo != null
+              ? CustomButton(
+                  buttonText: "退出",
+                  buttonColor: Colors.red,
+                  tap: () async {
+                    await SPUtil.remove(SP.userInfoKey);
+                    toastShort("退出成功");
+                    _getUserInfo();
+                  })
+              : SizedBox()
         ],
       ),
     );

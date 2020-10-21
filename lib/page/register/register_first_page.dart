@@ -1,8 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_jdshop/widget/custom_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_jdshop/utils/toast_util.dart';
 
 class RegisterFirstPage extends StatefulWidget {
   @override
@@ -10,6 +13,9 @@ class RegisterFirstPage extends StatefulWidget {
 }
 
 class _RegisterFirstPageState extends State<RegisterFirstPage> {
+  bool _buttonEnable = false;
+  String _tel = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,18 +54,32 @@ class _RegisterFirstPageState extends State<RegisterFirstPage> {
                         child: CustomTextField(
                           text: "请输入手机号码",
                           password: false,
+                          maxLength: 11,
+                          keyboardType: TextInputType.phone,
                           margin: EdgeInsets.zero,
-                          onChange: (value) {},
+                          onChange: (value) {
+                            if (value.length == 11) {
+                              _buttonEnable = true;
+                            } else {
+                              _buttonEnable = false;
+                            }
+                            setState(() {
+                              _tel = value;
+                              _buttonEnable = _buttonEnable;
+                            });
+                          },
                           border: Border.all(color: Colors.black12, width: 1.w),
                         ))
                   ],
                 ),
                 CustomButton(
                     buttonText: "下一步",
-                    buttonColor: Colors.red,
+                    buttonColor: _buttonEnable ? Colors.red : Colors.black12,
                     margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
                     tap: () {
-                      Navigator.pushNamed(context, '/registerSecond');
+                      if (_buttonEnable) {
+                        _sendCode();
+                      }
                     }),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,5 +103,22 @@ class _RegisterFirstPageState extends State<RegisterFirstPage> {
                 )
               ],
             )));
+  }
+
+  void _sendCode() async {
+    RegExp reg = RegExp(Config.getPhoneExp());
+    if (reg.hasMatch(_tel)) {
+      var response = await Dio().post(Config.getCode(), data: {'tel': _tel});
+      var data = response.data;
+      debugPrint("发送验证码返回$data");
+      if (data['success'] && data['code'] != null) {
+        Navigator.pushNamed(context, '/registerSecond',
+            arguments: {"tel": _tel, "code": data['code']});
+      } else {
+        toastShort(data['message']);
+      }
+    } else {
+       toastShort("手机格式不对");
+    }
   }
 }
