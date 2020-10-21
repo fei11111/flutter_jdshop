@@ -33,7 +33,7 @@ class _CartPageState extends State<CartPage> {
                 child: Text("删除"),
                 onPressed: () {
                   ///小于等于0，说明没有勾选
-                  if (context.read<CartProviders>().AllPrice <= 0) {
+                  if (context.read<CartProviders>().allPrice <= 0) {
                     return;
                   }
                   showCustomTipDialog(
@@ -119,12 +119,20 @@ class _CartPageState extends State<CartPage> {
                 }),
             Row(
               children: [
-                Text("合计:￥${context.watch<CartProviders>().AllPrice}",
+                Text("合计:￥${context.watch<CartProviders>().allPrice}",
                     style: TextStyle(color: Colors.red, fontSize: 30.sp)),
                 SizedBox(width: 20.w),
                 InkWell(
                     onTap: () {
-                      debugPrint("结算");
+                      List<ProductDetailItemModel> _checkList =
+                          context.watch<CartProviders>().checkList;
+                      if (_checkList.length > 0) {
+                        ///跳到结算页面
+                        Navigator.pushNamed(context, '/checkOut',
+                            arguments: {'list': _checkList});
+                      } else {
+                        toastShort("请勾选一件商品结算");
+                      }
                     },
                     child: Container(
                         alignment: Alignment.center,

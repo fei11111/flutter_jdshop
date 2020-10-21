@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/page/check_out_page.dart';
 import 'package:flutter_jdshop/page/login_page.dart';
 import 'package:flutter_jdshop/page/product_detal_page.dart';
 import 'package:flutter_jdshop/page/product_list_page.dart';
@@ -38,6 +39,9 @@ final routes = {
   ///注册2
   '/registerThird': (context, {arguments}) =>
       RegisterThirdPage(arguments: arguments),
+
+  ///结算
+  '/checkOut': (context, {arguments}) => CheckOutPage(arguments: arguments)
 };
 
 //固定写法

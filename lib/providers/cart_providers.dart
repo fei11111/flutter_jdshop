@@ -12,7 +12,9 @@ class CartProviders with ChangeNotifier {
   bool _isAllCheck = false;
   bool get allCheck => _isAllCheck;
   double _allPrice = 0;
-  double get AllPrice => _allPrice;
+  double get allPrice => _allPrice;
+  List<ProductDetailItemModel> _checkList = [];
+  List get checkList => _checkList;
 
   CartProviders() {
     _init();
@@ -124,8 +126,10 @@ class CartProviders with ChangeNotifier {
   ///获取所选价格
   void _getAllPrice() {
     _allPrice = 0;
+    _checkList = [];
     _cartList.forEach((element) {
       if (element.checked == true) {
+        _checkList.add(element);
         _allPrice += element.count * double.tryParse(element.price.toString());
       }
     });

@@ -10,8 +10,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class CartItemPage extends StatefulWidget {
   final ProductDetailItemModel model;
+  final bool isCheckOut; //结算页面
 
-  const CartItemPage({Key key, this.model}) : super(key: key);
+  const CartItemPage({Key key, this.model, this.isCheckOut = false})
+      : super(key: key);
 
   @override
   _CartItemPageState createState() => _CartItemPageState();
@@ -19,6 +21,7 @@ class CartItemPage extends StatefulWidget {
 
 class _CartItemPageState extends State<CartItemPage> {
   ProductDetailItemModel _model;
+  bool _isCheckOut;
 
   @override
   void initState() {
@@ -30,6 +33,7 @@ class _CartItemPageState extends State<CartItemPage> {
   Widget build(BuildContext context) {
     ///放在这里是因为要实时从父类那数据
     _model = widget.model;
+    _isCheckOut = widget.isCheckOut;
     debugPrint("cart item build");
     debugPrint("cart item 商品:${_model.title}");
     return Container(
@@ -41,13 +45,15 @@ class _CartItemPageState extends State<CartItemPage> {
           border: Border(bottom: BorderSide(width: 1, color: Colors.black12))),
       child: Row(
         children: [
-          Checkbox(
-              value: _model.checked,
-              onChanged: (value) {
-                _model.checked = value;
-                context.read<CartProviders>().itemCheck();
-              },
-              activeColor: Colors.pink),
+          !_isCheckOut
+              ? Checkbox(
+                  value: _model.checked,
+                  onChanged: (value) {
+                    _model.checked = value;
+                    context.read<CartProviders>().itemCheck();
+                  },
+                  activeColor: Colors.pink)
+              : SizedBox(),
           Container(
               width: 160.w,
               height: 160.h,
@@ -76,21 +82,28 @@ class _CartItemPageState extends State<CartItemPage> {
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(fontSize: 26.sp))),
-                                IconButton(
-                                    icon: Icon(Icons.delete_outline,
-                                        color: Colors.black54),
-                                    onPressed: () {
-                                      showCustomTipDialog(context, "提示",
-                                          "是否确认删除该商品？", "取消", "确认", () {}, () {
-                                        context
-                                            .read<CartProviders>()
-                                            .deleteCart(_model);
-                                        Fluttertoast.showToast(
-                                            msg: "删除成功",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.CENTER);
-                                      });
-                                    })
+                                !_isCheckOut
+                                    ? IconButton(
+                                        icon: Icon(Icons.delete_outline,
+                                            color: Colors.black54),
+                                        onPressed: () {
+                                          showCustomTipDialog(
+                                              context,
+                                              "提示",
+                                              "是否确认删除该商品？",
+                                              "取消",
+                                              "确认",
+                                              () {}, () {
+                                            context
+                                                .read<CartProviders>()
+                                                .deleteCart(_model);
+                                            Fluttertoast.showToast(
+                                                msg: "删除成功",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.CENTER);
+                                          });
+                                        })
+                                    : SizedBox()
                               ],
                             )),
                         Container(
@@ -98,15 +111,23 @@ class _CartItemPageState extends State<CartItemPage> {
                             child: Text("款式：${_model.selectedAttr}",
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(color: Colors.blue))),
+                                style: TextStyle(
+                                    color: !_isCheckOut
+                                        ? Colors.blue
+                                        : Colors.black))),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text("￥${_model.price.toString()}",
                                 style: TextStyle(
-                                    color: Colors.red, fontSize: 24.sp)),
-                            CartNumPage(model: _model)
+                                    color: !_isCheckOut
+                                        ? Colors.red
+                                        : Colors.black,
+                                    fontSize: 24.sp)),
+                            !_isCheckOut
+                                ? CartNumPage(model: _model)
+                                : Text("x${_model.count}")
                           ],
                         )
                       ])))

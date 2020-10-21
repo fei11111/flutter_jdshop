@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                     margin: EdgeInsets.only(top: 30.h, bottom: 30.h),
                     width: 200.w,
                     height: 200.h,
-                    child: Image.asset('images/login.png',fit: BoxFit.cover))),
+                    child: Image.asset('images/login.png', fit: BoxFit.cover))),
             CustomTextField(
                 text: "用户名/手机号",
                 password: false,
@@ -86,7 +86,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
             CustomButton(
                 buttonText: "登录",
-                buttonColor: _userName != null && _password != null
+                buttonColor: _userName != null &&
+                        _password != null &&
+                        _userName.length >= 11 &&
+                        _password.length >= 6
                     ? Colors.red
                     : Colors.black12,
                 margin: EdgeInsets.all(30.w),
@@ -106,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     if (_password.length < 6) {
-       toastShort("密码少于6位");
+      toastShort("密码少于6位");
       return;
     }
     loadingDialog.show(context);
@@ -127,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
       loadingDialog.dismiss(context);
-       toastShort(data['message']);
+      toastShort(data['message']);
     }
   }
 }
