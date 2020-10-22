@@ -1,49 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jdshop/config/sp.dart';
+import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/user_info.dart';
-import 'package:flutter_jdshop/utils/event_bus_util.dart';
-import 'package:flutter_jdshop/utils/sp_util.dart';
+import 'package:flutter_jdshop/providers/user_providers.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'dart:convert';
 
 class UserPage extends StatefulWidget {
   @override
   _UserPageState createState() => _UserPageState();
 }
 
-class _UserPageState extends State<UserPage> {
+class _UserPageState extends State<UserPage>
+    with AutomaticKeepAliveClientMixin {
   UserInfo _userInfo;
 
   @override
   void initState() {
     super.initState();
     debugPrint("user initState");
-    _initListener();
-    _getUserInfo();
-  }
-
-  void _initListener() {
-    eventBus.on<UserEvent>().listen((event) {
-      toastShort(event.str);
-      _getUserInfo();
-    });
-  }
-
-  void _getUserInfo() async {
-    String str = await SPUtil.getString(SP.userInfoKey);
-    UserInfo userInfo;
-    if (str != null) {
-      userInfo = UserInfo.fromJson(json.decode(str));
-    }
-    setState(() {
-      _userInfo = userInfo;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    _userInfo = context.watch<UserProvider>().userInfo;
     return Scaffold(
       // appBar: AppBar(centerTitle: true, title: Text("我的"), elevation: 0.0),
       body: ListView(
@@ -121,13 +102,15 @@ class _UserPageState extends State<UserPage> {
                   buttonText: "退出",
                   buttonColor: Colors.red,
                   tap: () async {
-                    await SPUtil.remove(SP.userInfoKey);
+                    context.read<UserProvider>().logout();
                     toastShort("退出成功");
-                    _getUserInfo();
                   })
               : SizedBox()
         ],
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

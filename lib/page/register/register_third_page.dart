@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/config/sp.dart';
+import 'package:flutter_jdshop/page/login_page.dart';
 import 'package:flutter_jdshop/page/tabs_page.dart';
 import 'package:flutter_jdshop/utils/sp_util.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
@@ -45,15 +46,23 @@ class _RegisterThirdPageState extends State<RegisterThirdPage> {
         var userInfo = list[0];
         await SPUtil.setString(SP.userInfoKey, json.encode(userInfo));
         // debugPrint("str = $str");
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (context) {
-          return TabsPage();
-        }), (route) => route == null);
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/login', ModalRoute.withName('/'));
+
+        ///下面这种也是可以的
+        // Navigator.pushAndRemoveUntil(context,
+        //     MaterialPageRoute(builder: (context) {
+        //   return LoginPage();
+        // }), (route) {
+        //   debugPrint("name:${route.settings.name}");
+        //   return route.settings.name == '/';
+        // });
+        toastShort("注册成功");
       } else {
-        toastShort( data['message']);
+        toastShort(data['message']);
       }
     } else {
-        toastShort( data['message']);
+      toastShort(data['message']);
     }
   }
 

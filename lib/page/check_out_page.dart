@@ -15,6 +15,9 @@ class CheckOutPage extends StatefulWidget {
 
 class _CheckOutPageState extends State<CheckOutPage> {
   List<ProductDetailItemModel> _list;
+  double _totalPrice = 0; //总价
+  double _discount = 15.0; //折扣
+  double _postage = 0; //邮费
 
   @override
   void initState() {
@@ -29,29 +32,45 @@ class _CheckOutPageState extends State<CheckOutPage> {
         appBar: AppBar(elevation: 0.0, centerTitle: true, title: Text("订单页面")),
         body: Stack(
           children: [
-            ListView(
-              physics: BouncingScrollPhysics(),
-              children: [
-                Padding(
-                    padding: EdgeInsets.only(bottom: 78.h),
-                    child: ListView(
-                        physics: BouncingScrollPhysics(),
-                        children: [
-                          _getAddressWidget(),
-                          _getProductListWidget()
-                        ])),
-                Align(
-                    alignment: Alignment.bottomCenter,
-                    child: _getBalanceWidget())
-              ],
-            )
+            Padding(
+                padding: EdgeInsets.only(bottom: 78.h),
+                child: ListView(physics: BouncingScrollPhysics(), children: [
+                  _getAddressWidget(),
+                  _getProductListWidget(),
+                  _getOtherPrice()
+                ])),
+            Align(alignment: Alignment.bottomCenter, child: _getBalanceWidget())
           ],
         ));
   }
 
+  /// 其他价格收费
+  Widget _getOtherPrice() {
+    return Container(
+        color: Colors.white,
+        padding: EdgeInsets.only(left: 20.w, top: 20.h),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("商品总金额:￥$_totalPrice"),
+              Divider(),
+              Text("立减:￥$_discount"),
+              Divider(),
+              Text("运费:￥0")
+            ]));
+  }
+
   ///收货地址
   Widget _getAddressWidget() {
-    return Container();
+    return Container(
+        height: 80.h,
+        alignment: Alignment.center,
+        child: InkWell(
+            child: Text("添加收货地址"),
+            onTap: () {
+              Navigator.pushNamed(context, '/addressAdd');
+            }));
   }
 
   ///商品列表
@@ -59,6 +78,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: _list.map((e) {
+          _totalPrice += e.count * double.parse(e.price);
           return CartItemPage(model: e, isCheckOut: true);
         }).toList());
   }
@@ -67,12 +87,13 @@ class _CheckOutPageState extends State<CheckOutPage> {
     return Container(
         width: double.infinity,
         height: 78.h,
+        padding: EdgeInsets.only(left: 10.w),
         decoration: BoxDecoration(
             border: Border(top: BorderSide(width: 1.w, color: Colors.black12))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("实付款￥"),
+            Text("实付款￥${_totalPrice - _discount - _postage}"),
             InkWell(
                 onTap: () {
                   debugPrint("结算");

@@ -134,7 +134,7 @@ class _RegisterSecondPageState extends State<RegisterSecondPage> {
   }
 
   void _sendCode() async {
-    RegExp reg = RegExp(Config.getPhoneExp());
+    RegExp reg = RegExp(Config.PHONE_EXP);
     if (reg.hasMatch(_tel)) {
       var response = await Dio().post(Config.getCode(), data: {'tel': _tel});
       var data = response.data;

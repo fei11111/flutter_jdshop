@@ -11,6 +11,9 @@ class CustomTextField extends StatelessWidget {
   final EdgeInsetsGeometry margin;
   final int maxLength;
   final TextInputType keyboardType;
+  final GestureTapCallback onTap;
+  final bool readOnly;
+  final TextEditingController controller;
 
   const CustomTextField(
       {Key key,
@@ -20,7 +23,10 @@ class CustomTextField extends StatelessWidget {
       this.border,
       this.margin,
       this.maxLength,
-      this.keyboardType})
+      this.keyboardType,
+      this.onTap,
+      this.readOnly = false,
+      this.controller})
       : super(key: key);
 
   @override
@@ -36,6 +42,9 @@ class CustomTextField extends StatelessWidget {
                 ? Border(bottom: BorderSide(width: 1.w, color: Colors.black12))
                 : border),
         child: TextField(
+            controller: controller,
+            readOnly: readOnly,
+            onTap: onTap,
             maxLength: maxLength == null ? kMaxValue : maxLength,
             obscureText: password,
             keyboardType:

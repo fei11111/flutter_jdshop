@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
-import 'package:flutter_jdshop/config/sp.dart';
+import 'package:flutter_jdshop/providers/user_providers.dart';
 import 'package:flutter_jdshop/utils/event_bus_util.dart';
-import 'package:flutter_jdshop/utils/sp_util.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_jdshop/widget/custom_text_field.dart';
 import 'package:flutter_jdshop/widget/loading_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() async {
-    RegExp reg = RegExp(Config.getPhoneExp());
+    RegExp reg = RegExp(Config.PHONE_EXP);
     if (!reg.hasMatch(_userName)) {
       toastShort("手机格式不对");
       return;
@@ -122,8 +122,8 @@ class _LoginPageState extends State<LoginPage> {
       var list = data['userinfo'];
       if (list.length > 0) {
         var userInfo = list[0];
-        await SPUtil.setString(SP.userInfoKey, json.encode(userInfo));
-        eventBus.fire(UserEvent("登录成功"));
+        context.read<UserProvider>().login(userInfo);
+        toastShort("登录成功");
         Navigator.pop(context);
       } else {
         toastShort(data['message']);

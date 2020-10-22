@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/address/address_add_page.dart';
+import 'package:flutter_jdshop/address/address_edit_page.dart';
+import 'package:flutter_jdshop/address/address_list_page.dart';
 import 'package:flutter_jdshop/page/check_out_page.dart';
 import 'package:flutter_jdshop/page/login_page.dart';
 import 'package:flutter_jdshop/page/product_detal_page.dart';
@@ -41,7 +44,16 @@ final routes = {
       RegisterThirdPage(arguments: arguments),
 
   ///结算
-  '/checkOut': (context, {arguments}) => CheckOutPage(arguments: arguments)
+  '/checkOut': (context, {arguments}) => CheckOutPage(arguments: arguments),
+
+  ///添加地址
+  '/addressAdd': (context) => AddressAddPage(),
+
+  ///编辑地址
+  '/addressEdit': (context, arguments) => AddressEditPage(arguments: arguments),
+
+  ///地址列表
+  '/addressList': (context) => AddressListPage()
 };
 
 //固定写法
@@ -52,12 +64,14 @@ var onGenerateRoute = (RouteSettings settings) {
   if (pageContentBuilder != null) {
     if (settings.arguments != null) {
       final Route route = MaterialPageRoute(
+          settings: settings,
           builder: (context) =>
               pageContentBuilder(context, arguments: settings.arguments));
       return route;
     } else {
-      final Route route =
-          MaterialPageRoute(builder: (context) => pageContentBuilder(context));
+      final Route route = MaterialPageRoute(
+          settings: settings,
+          builder: (context) => pageContentBuilder(context));
       return route;
     }
   }

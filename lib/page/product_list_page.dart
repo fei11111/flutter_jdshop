@@ -123,7 +123,7 @@ class _ProductListPageState extends State<ProductListPage>
                 itemBuilder: (context, index) {
                   ProductItemModel model = _productList[index];
                   String imageUrl =
-                      Config.domain + model.pic.replaceAll("\\", "/");
+                      Config.DOMAIN + model.pic.replaceAll("\\", "/");
                   debugPrint(imageUrl);
                   return Container(
                       decoration: BoxDecoration(color: Colors.white),

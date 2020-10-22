@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
+import 'package:flutter_jdshop/models/user_info.dart';
 import 'package:flutter_jdshop/page/cart/cart_item_page.dart';
 import 'package:flutter_jdshop/providers/cart_providers.dart';
+import 'package:flutter_jdshop/providers/user_providers.dart';
 import 'package:flutter_jdshop/utils/event_bus_util.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_tip_dialog.dart';
@@ -13,7 +15,10 @@ class CartPage extends StatefulWidget {
   _CartPageState createState() => _CartPageState();
 }
 
-class _CartPageState extends State<CartPage> {
+class _CartPageState extends State<CartPage>
+    with AutomaticKeepAliveClientMixin {
+  UserInfo _userInfo;
+
   @override
   void initState() {
     super.initState();
@@ -21,7 +26,11 @@ class _CartPageState extends State<CartPage> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    _userInfo = context.watch<UserProvider>().userInfo;
     debugPrint("cart build");
     return Scaffold(
         appBar: AppBar(
@@ -56,14 +65,7 @@ class _CartPageState extends State<CartPage> {
                             ProductDetailItemModel model =
                                 context.watch<CartProviders>().cartList[index];
                             debugPrint("商品:${model.title}");
-                            return InkWell(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                child: CartItemPage(model: model),
-                                onTap: () {
-                                  Navigator.pushNamed(context, '/productDetail',
-                                      arguments: {"id": model.id});
-                                });
+                            return CartItemPage(model: model);
                           })),
                   Align(
                       alignment: Alignment.bottomCenter,
@@ -123,13 +125,21 @@ class _CartPageState extends State<CartPage> {
                     style: TextStyle(color: Colors.red, fontSize: 30.sp)),
                 SizedBox(width: 20.w),
                 InkWell(
-                    onTap: () {
+                    onTap: () async {
                       List<ProductDetailItemModel> _checkList =
-                          context.watch<CartProviders>().checkList;
+                          context.read<CartProviders>().checkList;
                       if (_checkList.length > 0) {
-                        ///跳到结算页面
-                        Navigator.pushNamed(context, '/checkOut',
-                            arguments: {'list': _checkList});
+                        // try {
+                        if (_userInfo != null) {
+                          ///跳到结算页面
+                          Navigator.pushNamed(context, '/checkOut',
+                              arguments: {'list': _checkList});
+                        } else {
+                          toastShort("请先登录");
+                        }
+                        // } catch (e) {
+                        //   toastShort("请先登录");
+                        // }
                       } else {
                         toastShort("请勾选一件商品结算");
                       }

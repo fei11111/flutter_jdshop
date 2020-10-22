@@ -95,7 +95,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
     debugPrint("build");
     return Container(
       child: ListView(physics: BouncingScrollPhysics(), children: [
-        Image.network("${Config.domain}${_itemModel.pic.replaceAll("\\", "/")}",
+        Image.network("${Config.DOMAIN}${_itemModel.pic.replaceAll("\\", "/")}",
             fit: BoxFit.cover),
         Padding(
             padding: EdgeInsets.all(10.w),
