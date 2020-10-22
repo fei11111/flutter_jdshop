@@ -7,6 +7,7 @@ import 'dart:convert';
 class AddressProvider with ChangeNotifier {
   List<AddressModel> _addressList = [];
   List<AddressModel> get addressList => _addressList;
+  int get size => _addressList.length;
 
   AddressProvider() {
     _init();
@@ -26,6 +27,11 @@ class AddressProvider with ChangeNotifier {
   }
 
   void addAddress(AddressModel model) async {
+    if (model.isDefault) {
+      _addressList.forEach((element) {
+        element.isDefault = false;
+      });
+    }
     _addressList.add(model);
     await SPUtil.setString(SP.addressKey, json.encode(_addressList));
     notifyListeners();

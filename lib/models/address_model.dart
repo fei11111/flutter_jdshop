@@ -1,5 +1,5 @@
 class AddressModel {
-  String id;
+  int id;
   String userName;
   String area;
   String detail;

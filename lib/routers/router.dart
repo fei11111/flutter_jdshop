@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jdshop/address/address_add_page.dart';
-import 'package:flutter_jdshop/address/address_edit_page.dart';
-import 'package:flutter_jdshop/address/address_list_page.dart';
+import 'package:flutter_jdshop/page/address/address_add_page.dart';
+import 'package:flutter_jdshop/page/address/address_edit_page.dart';
+import 'package:flutter_jdshop/page/address/address_list_page.dart';
 import 'package:flutter_jdshop/page/check_out_page.dart';
 import 'package:flutter_jdshop/page/login_page.dart';
 import 'package:flutter_jdshop/page/product_detal_page.dart';

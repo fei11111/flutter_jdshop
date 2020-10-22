@@ -1,8 +1,13 @@
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/models/address_model.dart';
+import 'package:flutter_jdshop/providers/address_provider.dart';
+import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_jdshop/widget/custom_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class AddressAddPage extends StatefulWidget {
   @override
@@ -14,6 +19,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
   String _tel;
   String _area;
   String _detail;
+  bool _isDefault = false;
   TextEditingController _controller = TextEditingController();
 
   @override
@@ -80,6 +86,18 @@ class _AddressAddPageState extends State<AddressAddPage> {
                         _detail = value;
                       });
                     }),
+                Row(
+                  children: [
+                    Checkbox(
+                        value: _isDefault,
+                        onChanged: (value) {
+                          setState(() {
+                            _isDefault = value;
+                          });
+                        }),
+                    Text("设置为默认")
+                  ],
+                ),
                 CustomButton(
                     margin: EdgeInsets.only(top: 50.h),
                     buttonText: "增加",
@@ -101,7 +119,22 @@ class _AddressAddPageState extends State<AddressAddPage> {
                           _userName.length > 0 &&
                           _tel.length > 0 &&
                           _area.length > 0 &&
-                          _detail.length > 0) {}
+                          _detail.length > 0) {
+                        RegExp reg = RegExp(Config.PHONE_EXP);
+                        if (reg.hasMatch(_tel)) {
+                          AddressModel model = AddressModel(
+                              area: _area,
+                              id: context.read<AddressProvider>().size,
+                              userName: _userName,
+                              tel: _tel,
+                              detail: _detail,
+                              isDefault: _isDefault);
+                          context.read<AddressProvider>().addAddress(model);
+                          Navigator.pop(context);
+                        } else {
+                          toastShort("手机格式不对");
+                        }
+                      }
                     })
               ],
             )));
