@@ -28,7 +28,7 @@ class AddressProvider with ChangeNotifier {
 
   void addAddress(AddressModel model) async {
     if (model.isDefault) {
-      _addressList.forEach((element) {
+      _addressList.map((element) {
         element.isDefault = false;
       });
     }
