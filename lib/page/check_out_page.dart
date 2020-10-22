@@ -69,7 +69,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
         child: InkWell(
             child: Text("添加收货地址"),
             onTap: () {
-              Navigator.pushNamed(context, '/addressAdd');
+              Navigator.pushNamed(context, '/addressList');
             }));
   }
 

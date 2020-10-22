@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_jdshop/config/sp.dart';
-import 'package:flutter_jdshop/models/user_info.dart';
+import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/utils/sp_util.dart';
 
 class UserProvider with ChangeNotifier {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/providers/address_provider.dart';
 import 'package:flutter_jdshop/providers/cart_providers.dart';
 import 'package:flutter_jdshop/providers/user_providers.dart';
 import 'package:flutter_jdshop/routers/router.dart';
@@ -8,7 +9,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => CartProviders()),
-    ChangeNotifierProvider(create: (_) => UserProvider())
+    ChangeNotifierProvider(create: (_) => UserProvider()),
+    ChangeNotifierProvider(create: (_) => AddressProvider())
   ], child: MyApp()));
 }
 

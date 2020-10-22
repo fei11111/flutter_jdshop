@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/config/sp.dart';
-import 'package:flutter_jdshop/models/user_info.dart';
+import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/page/tabs/cart_page.dart';
 import 'package:flutter_jdshop/page/tabs/category_page.dart';
 import 'package:flutter_jdshop/page/tabs/home_page.dart';

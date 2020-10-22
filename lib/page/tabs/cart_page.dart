@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
-import 'package:flutter_jdshop/models/user_info.dart';
+import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/page/cart/cart_item_page.dart';
 import 'package:flutter_jdshop/providers/cart_providers.dart';
 import 'package:flutter_jdshop/providers/user_providers.dart';

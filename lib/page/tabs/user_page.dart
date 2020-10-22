@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
-import 'package:flutter_jdshop/models/user_info.dart';
+import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/providers/user_providers.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:provider/provider.dart';
