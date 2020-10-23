@@ -14,7 +14,7 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage>
     with AutomaticKeepAliveClientMixin {
-  UserInfo _userInfo;
+  UserModel _userInfo;
 
   @override
   void initState() {
@@ -24,7 +24,7 @@ class _UserPageState extends State<UserPage>
 
   @override
   Widget build(BuildContext context) {
-    _userInfo = context.watch<UserProvider>().userInfo;
+    _userInfo = context.watch<UserProvider>().userModel;
     return Scaffold(
       // appBar: AppBar(centerTitle: true, title: Text("我的"), elevation: 0.0),
       body: ListView(

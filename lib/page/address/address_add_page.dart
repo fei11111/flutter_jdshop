@@ -1,8 +1,11 @@
 import 'package:city_pickers/city_pickers.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
-import 'package:flutter_jdshop/models/address_model.dart';
-import 'package:flutter_jdshop/providers/address_provider.dart';
+import 'package:flutter_jdshop/models/user_model.dart';
+import 'package:flutter_jdshop/providers/user_providers.dart';
+import 'package:flutter_jdshop/utils/event_bus_util.dart';
+import 'package:flutter_jdshop/utils/sign_util.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_jdshop/widget/custom_text_field.dart';
@@ -19,7 +22,6 @@ class _AddressAddPageState extends State<AddressAddPage> {
   String _tel;
   String _area;
   String _detail;
-  bool _isDefault = false;
   TextEditingController _controller = TextEditingController();
 
   @override
@@ -55,6 +57,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 CustomTextField(
                     margin: EdgeInsets.only(top: 20.h),
                     text: "收货人电话",
+                    maxLength: 11,
                     onChange: (value) {
                       setState(() {
                         _tel = value;
@@ -86,18 +89,6 @@ class _AddressAddPageState extends State<AddressAddPage> {
                         _detail = value;
                       });
                     }),
-                Row(
-                  children: [
-                    Checkbox(
-                        value: _isDefault,
-                        onChanged: (value) {
-                          setState(() {
-                            _isDefault = value;
-                          });
-                        }),
-                    Text("设置为默认")
-                  ],
-                ),
                 CustomButton(
                     margin: EdgeInsets.only(top: 50.h),
                     buttonText: "增加",
@@ -122,15 +113,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
                           _detail.length > 0) {
                         RegExp reg = RegExp(Config.PHONE_EXP);
                         if (reg.hasMatch(_tel)) {
-                          AddressModel model = AddressModel(
-                              area: _area,
-                              id: context.read<AddressProvider>().size,
-                              userName: _userName,
-                              tel: _tel,
-                              detail: _detail,
-                              isDefault: _isDefault);
-                          context.read<AddressProvider>().addAddress(model);
-                          Navigator.pop(context);
+                          _addAddress();
                         } else {
                           toastShort("手机格式不对");
                         }
@@ -138,5 +121,34 @@ class _AddressAddPageState extends State<AddressAddPage> {
                     })
               ],
             )));
+  }
+
+  ///新增地址
+  void _addAddress() async {
+    UserModel userModel = context.read<UserProvider>().userModel;
+    Map map = {
+      'uid': userModel.id,
+      'salt': userModel.salt,
+      'phone': _tel,
+      'name': _userName,
+      'address': _area + _detail
+    };
+    String sign = SignUtil.getSign(map);
+    debugPrint("_addAddress sign=$sign");
+    var response = await Dio().post(Config.getAddAddress(), data: {
+      'uid': userModel.id,
+      'sign': sign,
+      'phone': _tel,
+      'name': _userName,
+      'address': _area + _detail
+    });
+    var data = response.data;
+    debugPrint("新增地址返回$data");
+    if (data['success']) {
+      eventBus.fire(AddressEvent("新增成功!", AddressType.ADD_ADDRESS));
+      Navigator.pop(context);
+    } else {
+      toastShort(data['message']);
+    }
   }
 }

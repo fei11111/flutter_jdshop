@@ -28,7 +28,8 @@ samples, guidance on mobile development, and a full API reference.
 #### 状态管理：provider
 #### 事件传递：event_bus
 #### toast:fluttertoast
-#### 城市三级联动:city_pickers
+#### 城市选择器:city_pickers
+#### 加密:crypto
 
 
 #### IndexedStack不能滚动，PageView可以滚动切换

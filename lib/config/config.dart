@@ -1,4 +1,3 @@
-
 class Config {
   static String DOMAIN = "http://jd.itying.com/";
   static String PHONE_EXP = r"^[1][2,3,4,5,6,7,8,9][0-9]{9}$";
@@ -69,5 +68,35 @@ class Config {
   ///登录
   static String getLogin() {
     return Config.DOMAIN + "api/doLogin";
+  }
+
+  ///获取用户默认地址
+  static String getDefaultAddress(String uid, String sign) {
+    return Config.DOMAIN + 'api/oneAddressList?uid=$uid&sign=$sign';
+  }
+
+  ///获取收货地址
+  static String getAddressList(String uid, String sign) {
+    return Config.DOMAIN + "api/addressList?uid=$uid&sign=$sign";
+  }
+
+  ///新增收货地址
+  static String getAddAddress() {
+    return Config.DOMAIN + "api/addAddress";
+  }
+
+  ///修改默认收货地址
+  static String getChangeDefaultAddress() {
+    return Config.DOMAIN + 'api/changeDefaultAddress';
+  }
+
+  ///修改收货地址
+  static String getEditAddress() {
+    return Config.DOMAIN + "api/editAddress";
+  }
+
+  ///删除收货地址
+  static String getDeleteAddress() {
+    return Config.DOMAIN + "api/deleteAddress";
   }
 }

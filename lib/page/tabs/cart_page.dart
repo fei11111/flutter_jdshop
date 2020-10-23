@@ -17,7 +17,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage>
     with AutomaticKeepAliveClientMixin {
-  UserInfo _userInfo;
+  UserModel _userInfo;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _CartPageState extends State<CartPage>
 
   @override
   Widget build(BuildContext context) {
-    _userInfo = context.watch<UserProvider>().userInfo;
+    _userInfo = context.watch<UserProvider>().userModel;
     debugPrint("cart build");
     return Scaffold(
         appBar: AppBar(

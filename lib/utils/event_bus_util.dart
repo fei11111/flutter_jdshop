@@ -12,12 +12,37 @@ class ProductDetailEvent {
   }
 }
 
-class UserEvent{
+class UserEvent {
   String str;
 
   UserEvent(String str) {
     this.str = str;
   }
+}
+
+class AddressEvent {
+  String str;
+
+  AddressType type;
+
+  AddressEvent(String str, AddressType type) {
+    this.str = str;
+    this.type = type;
+  }
+}
+
+enum AddressType {
+  ///添加地址
+  ADD_ADDRESS,
+
+  ///编辑地址
+  EDIT_ADDRESS,
+
+  ///删除地址
+  DELETE_ADDRESS,
+
+  ///修改为默认
+  DEFAULT_ADDRESS
 }
 
 enum ProductDetailType {

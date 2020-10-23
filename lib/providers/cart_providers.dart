@@ -28,7 +28,7 @@ class CartProviders with ChangeNotifier {
       debugPrint("初始化购物车，获取result=$result");
       _cartList = result
           .map<ProductDetailItemModel>(
-              (v) => new ProductDetailItemModel.fromJson(v))
+              (v) => ProductDetailItemModel.fromJson(v))
           .toList();
     } catch (e) {
       _cartList = [];

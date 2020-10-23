@@ -6,8 +6,8 @@ import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/utils/sp_util.dart';
 
 class UserProvider with ChangeNotifier {
-  UserInfo _userInfo;
-  UserInfo get userInfo => _userInfo;
+  UserModel _userModel;
+  UserModel get userModel => _userModel;
 
   UserProvider() {
     _init();
@@ -16,7 +16,7 @@ class UserProvider with ChangeNotifier {
   void _init() async {
     String str = await SPUtil.getString(SP.userInfoKey);
     if (str != null) {
-      _userInfo = UserInfo.fromJson(json.decode(str));
+      _userModel = UserModel.fromJson(json.decode(str));
     }
     notifyListeners();
     debugPrint("UserProvider init $str");
@@ -24,18 +24,18 @@ class UserProvider with ChangeNotifier {
 
   void login(dynamic userInfo) async {
     try {
-      _userInfo = UserInfo.fromJson(userInfo);
+      _userModel = UserModel.fromJson(userInfo);
       await SPUtil.setString(SP.userInfoKey, json.encode(userInfo));
       debugPrint("UserProvider login");
     } catch (e) {
-      _userInfo = null;
+      _userModel = null;
     }
     notifyListeners();
   }
 
   void logout() async {
     await SPUtil.remove(SP.userInfoKey);
-    _userInfo = null;
+    _userModel = null;
     notifyListeners();
   }
 }

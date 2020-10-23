@@ -1,13 +1,13 @@
-class UserInfo  {
+class UserModel  {
 	String id;
 	String username;
 	String tel;
 	String salt;
 
-	UserInfo({this.id, this.username, this.tel, this.salt});
+	UserModel({this.id, this.username, this.tel, this.salt});
 
-	factory UserInfo.fromJson(Map<String, dynamic> json) {
-		return UserInfo(
+	factory UserModel.fromJson(Map<String, dynamic> json) {
+		return UserModel(
 			id: json['_id'],
 			username: json['username'],
 			tel: json['tel'],
