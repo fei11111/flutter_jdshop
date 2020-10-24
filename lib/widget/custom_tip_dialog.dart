@@ -14,12 +14,14 @@ void showCustomTipDialog(
       builder: (context) {
         return AlertDialog(
           titlePadding: EdgeInsets.zero,
-          title: Container(
-              padding: EdgeInsets.all(10.w),
-              width: double.infinity,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(color: Colors.red),
-              child: Text(title, style: TextStyle(color: Colors.white))),
+          title: title != null && title.length > 0
+              ? Container(
+                  padding: EdgeInsets.all(10.w),
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(color: Colors.red),
+                  child: Text(title, style: TextStyle(color: Colors.white)))
+              : SizedBox(),
           content: Text(content),
           actions: [
             Container(
@@ -30,7 +32,7 @@ void showCustomTipDialog(
                   child: Text(cancelButtonStr,
                       style: TextStyle(color: Colors.white)),
                   onPressed: () {
-                    cancelFuction();
+                    if (cancelFuction != null) cancelFuction();
                     Navigator.pop(context);
                   }),
             ),
@@ -42,7 +44,7 @@ void showCustomTipDialog(
                   child: Text(confirmButtonStr,
                       style: TextStyle(color: Colors.red)),
                   onPressed: () {
-                    confirmFunction();
+                    if (confirmFunction != null) confirmFunction();
                     Navigator.pop(context);
                   }),
             )

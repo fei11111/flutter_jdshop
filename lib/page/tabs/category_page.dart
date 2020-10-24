@@ -86,7 +86,7 @@ class _CategoryPageState extends State<CategoryPage>
                   itemBuilder: (context, index) {
                     CateItemModel model = rightList[index];
                     String url =
-                        Config.DOMAIN + model.pic.replaceAll("\\", "/");
+                        Config.domain + model.pic.replaceAll("\\", "/");
                     debugPrint("分类商品url:$url");
                     return InkWell(
                         onTap: () {

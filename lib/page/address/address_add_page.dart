@@ -55,6 +55,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
                       });
                     }),
                 CustomTextField(
+                    keyboardType: TextInputType.phone,
                     margin: EdgeInsets.only(top: 20.h),
                     text: "收货人电话",
                     maxLength: 11,
@@ -111,7 +112,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
                           _tel.length > 0 &&
                           _area.length > 0 &&
                           _detail.length > 0) {
-                        RegExp reg = RegExp(Config.PHONE_EXP);
+                        RegExp reg = RegExp(Config.phoneExp);
                         if (reg.hasMatch(_tel)) {
                           _addAddress();
                         } else {
@@ -146,6 +147,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
     debugPrint("新增地址返回$data");
     if (data['success']) {
       eventBus.fire(AddressEvent("新增成功!", AddressType.ADD_ADDRESS));
+      eventBus.fire(AddressEvent("更新默认地址", AddressType.DEFAULT_ADDRESS));
       Navigator.pop(context);
     } else {
       toastShort(data['message']);

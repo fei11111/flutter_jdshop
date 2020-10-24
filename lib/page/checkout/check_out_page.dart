@@ -1,14 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/address_model.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
-import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/page/cart/cart_item_page.dart';
-import 'package:flutter_jdshop/providers/user_providers.dart';
-import 'package:flutter_jdshop/utils/event_bus_util.dart';
-import 'package:flutter_jdshop/utils/sign_util.dart';
-import 'package:flutter_jdshop/utils/toast_util.dart';
+import 'package:flutter_jdshop/page/checkout/widget/default_address_widget.dart';
+import 'package:flutter_jdshop/providers/address_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
@@ -25,51 +20,19 @@ class CheckOutPage extends StatefulWidget {
 class _CheckOutPageState extends State<CheckOutPage> {
   double _totalPrice = 0; //总价
   double _discount = 15.0; //折扣
-  double _postage = 0; //邮费
-  AddressItemModel _addressItemModel;
   List<ProductDetailItemModel> _list = [];
+  double _postage = 0; //邮费
 
   @override
   void initState() {
     super.initState();
     _list = widget.arguments["list"];
     debugPrint("CheckOutPage initState 商品数量${_list.length}");
-    _getDefaultAddress();
-    _initListener();
   }
 
-  void _initListener() {
-    eventBus.on<AddressEvent>().listen((event) {
-      if (event.type == AddressType.DEFAULT_ADDRESS) {
-        _getDefaultAddress();
-      } else {
-        eventBus.fire(event);
-      }
-    });
-  }
-
-  ///获取用户默认地址
-  void _getDefaultAddress() async {
-    UserModel userModel = context.read<UserProvider>().userModel;
-    Map map = {'uid': userModel.id, 'salt': userModel.salt};
-    String sign = SignUtil.getSign(map);
-    debugPrint("_getDefaultAddress sign=$sign");
-    var response =
-        await Dio().get(Config.getDefaultAddress(userModel.id, sign));
-    var data = response.data;
-    debugPrint("默认地址返回:$data");
-    if (data['success']) {
-      AddressModel addressModel = AddressModel.fromJson(data);
-      if (addressModel != null) {
-        if (addressModel.result != null && addressModel.result.length > 0) {
-          setState(() {
-            _addressItemModel = addressModel.result[0];
-          });
-        }
-      }
-    } else {
-      toastShort(data['message']);
-    }
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -81,7 +44,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
             Padding(
                 padding: EdgeInsets.only(bottom: 78.h),
                 child: ListView(physics: BouncingScrollPhysics(), children: [
-                  _getAddressWidget(),
+                  DefaultAddressWidget(),
                   _getProductListWidget(),
                   _getOtherPrice()
                 ])),
@@ -107,33 +70,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
             ]));
   }
 
-  ///收货地址
-  Widget _getAddressWidget() {
-    return Container(
-        margin: EdgeInsets.only(top: 10.h),
-        color: Colors.white,
-        child: _addressItemModel == null
-            ? ListTile(
-                leading: Icon(Icons.add_location),
-                title: Center(
-                  child: Text("请添加收货地址"),
-                ),
-                trailing: Icon(Icons.navigate_next),
-                onTap: () {
-                  Navigator.pushNamed(context, '/addressList');
-                })
-            : ListTile(
-                title: Text(
-                    _addressItemModel.name + "  " + _addressItemModel.phone),
-                subtitle: Text(_addressItemModel.address),
-                trailing: Icon(Icons.edit),
-                onTap: () {
-                  Navigator.pushNamed(context, '/addressList');
-                }));
-  }
-
   ///商品列表
   Widget _getProductListWidget() {
+    _totalPrice = 0;
     return Container(
         margin: EdgeInsets.only(top: 10.h),
         child: Column(
@@ -144,6 +83,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
             }).toList()));
   }
 
+  ///结算
   Widget _getBalanceWidget() {
     return Container(
         width: double.infinity,
@@ -157,7 +97,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
             Text("实付款￥${_totalPrice - _discount - _postage}"),
             InkWell(
                 onTap: () {
-                  debugPrint("结算");
+                  AddressItemModel model =
+                      context.read<AddressProvider>().defaultAddress;
+                  debugPrint("${model?.address}");
                 },
                 child: Container(
                     alignment: Alignment.center,

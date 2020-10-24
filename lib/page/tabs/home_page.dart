@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage>
                   autoplay: true,
                   itemBuilder: (context, index) {
                     String url = list[index].pic.replaceAll("\\", "/");
-                    return Image.network("${Config.DOMAIN}$url",
+                    return Image.network("${Config.domain}$url",
                         fit: BoxFit.cover);
                   },
                   pagination: SwiperPagination(),
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage>
                 scrollDirection: Axis.horizontal,
                 itemCount: likeProductList.length,
                 itemBuilder: (context, index) {
-                  var url = Config.DOMAIN +
+                  var url = Config.domain +
                       likeProductList[index].pic.replaceAll("\\", "/");
                   print(url);
                   return InkWell(
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage>
                     mainAxisSpacing: 10.w,
                     childAspectRatio: width / height),
                 itemBuilder: (context, index) {
-                  var url = Config.DOMAIN +
+                  var url = Config.domain +
                       hotProductList[index].pic.replaceAll("\\", "/");
                   print("热门推荐$url");
                   return InkWell(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/page/address/address_add_page.dart';
 import 'package:flutter_jdshop/page/address/address_edit_page.dart';
 import 'package:flutter_jdshop/page/address/address_list_page.dart';
-import 'package:flutter_jdshop/page/check_out_page.dart';
+import 'package:flutter_jdshop/page/checkout/check_out_page.dart';
 import 'package:flutter_jdshop/page/login_page.dart';
 import 'package:flutter_jdshop/page/product_detal_page.dart';
 import 'package:flutter_jdshop/page/product_list_page.dart';
@@ -50,7 +50,8 @@ final routes = {
   '/addressAdd': (context) => AddressAddPage(),
 
   ///编辑地址
-  '/addressEdit': (context, arguments) => AddressEditPage(arguments: arguments),
+  '/addressEdit': (context, {arguments}) =>
+      AddressEditPage(arguments: arguments),
 
   ///地址列表
   '/addressList': (context) => AddressListPage()

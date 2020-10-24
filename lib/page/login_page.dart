@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() async {
-    RegExp reg = RegExp(Config.PHONE_EXP);
+    RegExp reg = RegExp(Config.phoneExp);
     if (!reg.hasMatch(_userName)) {
       toastShort("手机格式不对");
       return;
@@ -112,13 +112,13 @@ class _LoginPageState extends State<LoginPage> {
       toastShort("密码少于6位");
       return;
     }
-    loadingDialog.show(context);
+    showingDialog(context);
     var response = await Dio().post(Config.getLogin(),
         data: {'username': _userName, 'password': _password});
     var data = response.data;
     debugPrint("登录返回:$data");
     if (data['success']) {
-      loadingDialog.dismiss(context);
+      closeDialog(context);
       var list = data['userinfo'];
       if (list.length > 0) {
         var userInfo = list[0];
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
         toastShort(data['message']);
       }
     } else {
-      loadingDialog.dismiss(context);
+      closeDialog(context);
       toastShort(data['message']);
     }
   }

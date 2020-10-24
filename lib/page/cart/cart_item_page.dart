@@ -64,7 +64,7 @@ class _CartItemPageState extends State<CartItemPage> {
                   child: AspectRatio(
                       aspectRatio: 1 / 1,
                       child: Image.network(
-                          "${Config.DOMAIN}${_model.pic.replaceAll("\\", "/")}",
+                          "${Config.domain}${_model.pic.replaceAll("\\", "/")}",
                           fit: BoxFit.cover))),
               Expanded(
                   flex: 1,
