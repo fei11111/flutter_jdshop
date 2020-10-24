@@ -143,6 +143,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
         eventBus.fire(AddressEvent("修改地址", AddressType.DEFAULT_ADDRESS));
       }
       eventBus.fire(AddressEvent('修改地址', AddressType.EDIT_ADDRESS));
+      toastShort('修改成功');
       Navigator.pop(context);
     } else {
       toastShort(data['message']);
