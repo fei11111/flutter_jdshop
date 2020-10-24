@@ -99,4 +99,9 @@ class Config {
   static String getDeleteAddress() {
     return Config.domain + "api/deleteAddress";
   }
+
+  ///提交订单
+  static String getDoOrder() {
+    return Config.domain + 'api/doOrder';
+  }
 }

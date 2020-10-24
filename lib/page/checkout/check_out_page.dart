@@ -1,11 +1,20 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/address_model.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
+import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/page/cart/cart_item_page.dart';
 import 'package:flutter_jdshop/page/checkout/widget/default_address_widget.dart';
 import 'package:flutter_jdshop/providers/address_provider.dart';
+import 'package:flutter_jdshop/providers/cart_providers.dart';
+import 'package:flutter_jdshop/providers/user_providers.dart';
+import 'package:flutter_jdshop/utils/sign_util.dart';
+import 'package:flutter_jdshop/utils/toast_util.dart';
+import 'package:flutter_jdshop/widget/loading_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 
 ///结算界面
 class CheckOutPage extends StatefulWidget {
@@ -97,9 +106,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
             Text("实付款￥${_totalPrice - _discount - _postage}"),
             InkWell(
                 onTap: () {
-                  AddressItemModel model =
-                      context.read<AddressProvider>().defaultAddress;
-                  debugPrint("${model?.address}");
+                  _commitOrder();
                 },
                 child: Container(
                     alignment: Alignment.center,
@@ -109,5 +116,56 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     child: Text("立即下单", style: TextStyle(color: Colors.white))))
           ],
         ));
+  }
+
+  void _commitOrder() async {
+    UserModel userModel = context.read<UserProvider>().userModel;
+    AddressItemModel model = context.read<AddressProvider>().defaultAddress;
+    if (model == null) {
+      toastShort('请填写收货地址');
+      return;
+    }
+    if (_list.length <= 0) {
+      toastShort('没有商品');
+      return;
+    }
+
+    Map map = {
+      'uid': userModel.id,
+      'address': model.address,
+      'phone': model.phone,
+      'name': model.name,
+      'products': json.encode(_list),
+      'all_price': _totalPrice.toStringAsFixed(1), //保留一位小数
+      'salt': userModel.salt
+    };
+    debugPrint("map=${map.toString()}");
+    String sign = SignUtil.getSign(map);
+    showingDialog(context);
+    var response = await Dio().post(Config.getDoOrder(), data: {
+      'uid': userModel.id,
+      'phone': model.phone,
+      'address': model.address,
+      'name': model.name,
+      'all_price': _totalPrice.toStringAsFixed(1), //保留一位小数
+      'products': json.encode(_list),
+      'sign': sign
+    });
+    var data = response.data;
+    closeDialog(context);
+    debugPrint("提交订单请求返回$data");
+    if (data['success']) {
+      ///删除购物车选中商品
+      context.read<CartProviders>().deleteCartByChecked();
+      if (data['result']['order_id'] != null &&
+          data['result']['all_price'] != null) {
+        Navigator.pushNamed(context, '/pay', arguments: {
+          'order_id': data['result']['order_id'],
+          'all_price': data['result']['all_price']
+        });
+      }
+    } else {
+      toastShort(data['message']);
+    }
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:crypto/crypto.dart';
+import 'package:flutter/cupertino.dart';
 
 class SignUtil {
   static String getSign(Map map) {
@@ -10,6 +10,7 @@ class SignUtil {
     for (var item in keys) {
       str += "$item${map[item]}";
     }
+    debugPrint("排序后$str");
     return md5.convert(utf8.encode(str)).toString();
   }
 }

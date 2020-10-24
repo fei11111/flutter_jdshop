@@ -4,6 +4,7 @@ import 'package:flutter_jdshop/page/address/address_edit_page.dart';
 import 'package:flutter_jdshop/page/address/address_list_page.dart';
 import 'package:flutter_jdshop/page/checkout/check_out_page.dart';
 import 'package:flutter_jdshop/page/login_page.dart';
+import 'package:flutter_jdshop/page/pay_page.dart';
 import 'package:flutter_jdshop/page/product_detal_page.dart';
 import 'package:flutter_jdshop/page/product_list_page.dart';
 import 'package:flutter_jdshop/page/register/register_first_page.dart';
@@ -54,7 +55,10 @@ final routes = {
       AddressEditPage(arguments: arguments),
 
   ///地址列表
-  '/addressList': (context) => AddressListPage()
+  '/addressList': (context) => AddressListPage(),
+
+  ///支付页面
+  '/pay': (context, {arguments}) => PayPage(arguments: arguments)
 };
 
 //固定写法
