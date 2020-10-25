@@ -140,7 +140,7 @@ class OrderProductModel {
   String _orderId;
   String _productTitle;
   String _productId;
-  String _productPrice;
+  Object _productPrice;
   String _productImg;
   int _productCount;
   String _selectedAttr;
@@ -150,7 +150,7 @@ class OrderProductModel {
   String get orderId => _orderId;
   String get productTitle => _productTitle;
   String get productId => _productId;
-  String get productPrice => _productPrice;
+  Object get productPrice => _productPrice;
   String get productImg => _productImg;
   int get productCount => _productCount;
   String get selectedAttr => _selectedAttr;
@@ -161,7 +161,7 @@ class OrderProductModel {
       String orderId,
       String productTitle,
       String productId,
-      String productPrice,
+      Object productPrice,
       String productImg,
       int productCount,
       String selectedAttr,

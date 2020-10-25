@@ -152,18 +152,32 @@ class _OrderPageState extends State<OrderPage> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Container(
-                    width: 160.w,
-                    height: 160.h,
-                    margin: EdgeInsets.only(right: 15.w),
-                    child: AspectRatio(
-                        aspectRatio: 1 / 1,
-                        child: Image.network(
-                            "${Config.domain}${e.productImg.replaceAll("\\", "/")}",
-                            fit: BoxFit.cover))),
-                Text(e.productTitle)
-              ]),
+              Expanded(
+                  flex: 1,
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                            width: 160.w,
+                            height: 160.h,
+                            margin: EdgeInsets.only(right: 15.w),
+                            child: AspectRatio(
+                                aspectRatio: 1 / 1,
+                                child: Image.network(
+                                    "${Config.domain}${e.productImg.replaceAll("\\", "/")}",
+                                    fit: BoxFit.cover))),
+                        Expanded(
+                            flex: 1,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(e.productTitle,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis),
+                                  Text("￥${e.productPrice.toString()}",
+                                      style: TextStyle(color: Colors.red))
+                                ]))
+                      ])),
               Text("x${e.productCount}")
             ],
           ));

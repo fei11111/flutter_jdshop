@@ -87,7 +87,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: _list.map((e) {
-              _totalPrice += e.count * double.parse(e.price);
+              _totalPrice += e.count * double.parse(e.price.toString());
               return CartItemPage(model: e, isCheckOut: true);
             }).toList()));
   }
