@@ -34,7 +34,8 @@ class _OrderListPageState extends State<OrderListPage>
     super.initState();
     debugPrint("OrderPage initState");
     _currentIndex = widget.arguments['index'];
-    _tabController = TabController(length: 5, vsync: this,initialIndex: _currentIndex);
+    _tabController =
+        TabController(length: 5, vsync: this, initialIndex: _currentIndex);
     _getOrderList();
   }
 
