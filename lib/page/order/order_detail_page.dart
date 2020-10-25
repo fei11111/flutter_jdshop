@@ -45,6 +45,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           Align(
               alignment: Alignment.bottomCenter,
               child: Container(
+                  color: Colors.white,
                   margin: EdgeInsets.only(left: 15.w),
                   height: 78.h,
                   alignment: Alignment.centerLeft,
