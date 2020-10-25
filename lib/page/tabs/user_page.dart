@@ -75,7 +75,8 @@ class _UserPageState extends State<UserPage>
               title: Text("全部订单"),
               onTap: () {
                 if (_userInfo != null) {
-                  Navigator.pushNamed(context, '/order');
+                  Navigator.pushNamed(context, '/order',
+                      arguments: {'index': 0});
                 } else {
                   toastShort("请先登录");
                 }
@@ -83,11 +84,27 @@ class _UserPageState extends State<UserPage>
           Divider(),
           ListTile(
               leading: Icon(Icons.payment, color: Colors.green),
-              title: Text("待付款")),
+              title: Text("待付款"),
+              onTap: () {
+                if (_userInfo != null) {
+                  Navigator.pushNamed(context, '/order',
+                      arguments: {'index': 1});
+                } else {
+                  toastShort("请先登录");
+                }
+              }),
           Divider(),
           ListTile(
               leading: Icon(Icons.local_car_wash, color: Colors.orange),
-              title: Text("待收货")),
+              title: Text("待收货"),
+              onTap: () {
+                if (_userInfo != null) {
+                  Navigator.pushNamed(context, '/order',
+                      arguments: {'index': 2});
+                } else {
+                  toastShort("请先登录");
+                }
+              }),
           Container(
               width: double.infinity,
               height: 20.h,

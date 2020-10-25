@@ -63,7 +63,7 @@ final routes = {
   '/pay': (context, {arguments}) => PayPage(arguments: arguments),
 
   ///订单界面
-  '/order': (context) => OrderPage(),
+  '/order': (context, {arguments}) => OrderListPage(arguments: arguments),
 
   ///订单详情
   '/orderDetail': (context, {arguments}) =>

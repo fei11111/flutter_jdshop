@@ -13,21 +13,29 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 ///订单界面
-class OrderPage extends StatefulWidget {
+class OrderListPage extends StatefulWidget {
+  final Map arguments;
+
+  const OrderListPage({Key key, this.arguments}) : super(key: key);
+
   @override
-  _OrderPageState createState() => _OrderPageState();
+  _OrderListPageState createState() => _OrderListPageState();
 }
 
-class _OrderPageState extends State<OrderPage> with TickerProviderStateMixin {
+class _OrderListPageState extends State<OrderListPage>
+    with TickerProviderStateMixin {
   TabController _tabController;
   List<OrderItemModel> _alllist;
   List<OrderItemModel> _list;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
     debugPrint("OrderPage initState");
-    _tabController = TabController(length: 5, vsync: this);
+    _currentIndex = widget.arguments['index'];
+    _tabController =
+        TabController(length: 5, vsync: this, initialIndex: _currentIndex);
     _getOrderList();
   }
 
@@ -43,9 +51,7 @@ class _OrderPageState extends State<OrderPage> with TickerProviderStateMixin {
     if (data['success']) {
       var orderModel = OrderModel.fromJson(data);
       _alllist = orderModel.result;
-      setState(() {
-        _list = orderModel.result;
-      });
+      _filterList(_currentIndex);
     } else {
       toastShort(data['message']);
     }
