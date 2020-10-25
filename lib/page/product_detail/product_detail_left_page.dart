@@ -298,7 +298,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                   alignment: Alignment.bottomCenter,
                   child: CustomButton(
                       buttonText: "确认",
-                      buttonColor: Colors.red,
+                      bgColor: Colors.red,
                       tap: () {
                         Navigator.pop(context);
                         _itemModel.attr = tempAttr;

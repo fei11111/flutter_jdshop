@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             CustomButton(
                 buttonText: "登录",
-                buttonColor: _userName != null &&
+                bgColor: _userName != null &&
                         _password != null &&
                         _userName.length >= 11 &&
                         _password.length >= 6

@@ -104,4 +104,9 @@ class Config {
   static String getDoOrder() {
     return Config.domain + 'api/doOrder';
   }
+
+  ///订单列表
+  static String getOrderList(String uid, String sign) {
+    return Config.domain + 'api/orderList?uid=$uid&sign=$sign';
+  }
 }

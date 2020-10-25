@@ -15,9 +15,7 @@ class ProductListPage extends StatefulWidget {
   _ProductListPageState createState() => _ProductListPageState();
 }
 
-class _ProductListPageState extends State<ProductListPage>
-    with TickerProviderStateMixin {
-  TabController _tabController;
+class _ProductListPageState extends State<ProductListPage> {
   int _currentIndex = 0;
   List _tabs = [
     {
@@ -57,7 +55,6 @@ class _ProductListPageState extends State<ProductListPage>
   void initState() {
     super.initState();
     _keyWords = widget.arguments["keyWords"];
-    _tabController = TabController(length: 3, vsync: this);
     _requestProductData();
     _initListener();
   }
@@ -340,7 +337,6 @@ class _ProductListPageState extends State<ProductListPage>
 
   @override
   void dispose() {
-    _tabController?.dispose();
     super.dispose();
   }
 }

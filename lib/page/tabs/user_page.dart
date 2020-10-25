@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/providers/user_providers.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
@@ -73,7 +72,14 @@ class _UserPageState extends State<UserPage>
                   })),
           ListTile(
               leading: Icon(Icons.assignment, color: Colors.red),
-              title: Text("全部订单")),
+              title: Text("全部订单"),
+              onTap: () {
+                if (_userInfo != null) {
+                  Navigator.pushNamed(context, '/order');
+                } else {
+                  toastShort("请先登录");
+                }
+              }),
           Divider(),
           ListTile(
               leading: Icon(Icons.payment, color: Colors.green),
@@ -100,7 +106,7 @@ class _UserPageState extends State<UserPage>
           _userInfo != null
               ? CustomButton(
                   buttonText: "退出",
-                  buttonColor: Colors.red,
+                  bgColor: Colors.red,
                   tap: () async {
                     context.read<UserProvider>().logout();
                     toastShort("退出成功");

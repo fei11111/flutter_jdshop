@@ -145,7 +145,7 @@ class _AddressListPageState extends State<AddressListPage> {
             Align(
                 alignment: Alignment.bottomCenter,
                 child: CustomButton(
-                    buttonColor: Colors.red,
+                    bgColor: Colors.red,
                     buttonText: "新增",
                     tap: () {
                       Navigator.pushNamed(context, '/addressAdd');

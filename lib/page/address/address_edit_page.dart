@@ -93,7 +93,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
                 CustomButton(
                     margin: EdgeInsets.only(top: 50.h),
                     buttonText: "增加",
-                    buttonColor: _nameController.text.length > 0 &&
+                    bgColor: _nameController.text.length > 0 &&
                             _telController.text.length > 0 &&
                             _areaController.text.length > 0 &&
                             _detail.length > 0

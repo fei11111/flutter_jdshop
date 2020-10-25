@@ -3,18 +3,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomButton extends StatelessWidget {
   final String buttonText;
-  final Color buttonColor;
+  final Color bgColor;
   final Function tap;
   final double height;
   final EdgeInsetsGeometry margin;
+  final Color buttonColor;
 
   CustomButton(
       {Key key,
-      this.buttonColor = Colors.black,
+      this.bgColor = Colors.black,
       this.buttonText = "按钮",
       this.tap,
       this.height,
-      this.margin})
+      this.margin,
+      this.buttonColor})
       : super(key: key);
 
   @override
@@ -30,9 +32,11 @@ class CustomButton extends StatelessWidget {
                 left: 30.w, right: 30.w, top: 10.h, bottom: 10.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.w),
-              color: buttonColor,
+              color: bgColor,
             ),
-            child: Text(buttonText, style: TextStyle(color: Colors.white))),
+            child: Text(buttonText,
+                style: TextStyle(
+                    color: buttonColor == null ? Colors.white : buttonColor))),
         onTap: tap);
   }
 }

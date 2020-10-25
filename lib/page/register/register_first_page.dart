@@ -74,7 +74,7 @@ class _RegisterFirstPageState extends State<RegisterFirstPage> {
                 ),
                 CustomButton(
                     buttonText: "下一步",
-                    buttonColor: _buttonEnable ? Colors.red : Colors.black12,
+                    bgColor: _buttonEnable ? Colors.red : Colors.black12,
                     margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
                     tap: () {
                       if (_buttonEnable) {

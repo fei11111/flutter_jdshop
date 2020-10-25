@@ -93,7 +93,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 CustomButton(
                     margin: EdgeInsets.only(top: 50.h),
                     buttonText: "增加",
-                    buttonColor: _userName != null &&
+                    bgColor: _userName != null &&
                             _tel != null &&
                             _area != null &&
                             _detail != null &&

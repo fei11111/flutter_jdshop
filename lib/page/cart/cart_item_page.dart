@@ -126,7 +126,7 @@ class _CartItemPageState extends State<CartItemPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text("￥${_model.price.toString()}",
+                                Text("￥${_model.price}",
                                     style: TextStyle(
                                         color: Colors.red, fontSize: 24.sp)),
                                 !_isCheckOut

@@ -112,7 +112,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               children: [
                 CustomButton(
                     buttonText: "加入购物车",
-                    buttonColor: Colors.red,
+                    bgColor: Colors.red,
                     tap: () {
                       if (_itemModel.attr.length > 0) {
                         ///说明有款式可以选，弹出选择框，不然就直接提示加入购物车
@@ -125,7 +125,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     }),
                 CustomButton(
                     buttonText: "立即购买",
-                    buttonColor: Colors.yellow,
+                    bgColor: Colors.yellow,
                     tap: () {
                       if (_itemModel.attr.length > 0) {
                         ///说明有款式可以选，弹出选择框，不然就直接提示加入购物车
@@ -159,7 +159,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         _itemModel == null
                             ? LoadingWidget()
                             : ProductDetailLeft(itemModel: _itemModel),
-                        _id == null || _id.isEmpty
+                        _id == null || _id.length == 0
                             ? LoadingWidget()
                             : ProductDetailMiddle(arguments: {"id": _id}),
                         ProductDetailRight()

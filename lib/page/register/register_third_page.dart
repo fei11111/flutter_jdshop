@@ -111,7 +111,7 @@ class _RegisterThirdPageState extends State<RegisterThirdPage> {
                     style: TextStyle(color: Colors.black38, fontSize: 23.sp)),
                 CustomButton(
                     buttonText: "完成",
-                    buttonColor:
+                    bgColor:
                         _password.length >= 6 ? Colors.red : Colors.black12,
                     margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
                     tap: () {

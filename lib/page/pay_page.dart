@@ -72,7 +72,7 @@ class _PayPageState extends State<PayPage> {
             Align(
                 alignment: Alignment.bottomCenter,
                 child: CustomButton(
-                    buttonColor: Colors.red,
+                    bgColor: Colors.red,
                     buttonText: "支付",
                     tap: () {
                       debugPrint("支付");

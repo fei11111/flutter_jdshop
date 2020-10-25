@@ -75,7 +75,7 @@ class _RegisterSecondPageState extends State<RegisterSecondPage> {
                         )),
                     CustomButton(
                         buttonText: _isSendCode ? "重新发送" : "$_second秒后重发",
-                        buttonColor: _isSendCode ? Colors.red : Colors.black12,
+                        bgColor: _isSendCode ? Colors.red : Colors.black12,
                         margin: EdgeInsets.only(
                             left: 20.w, top: 20.h, bottom: 20.h),
                         tap: () {
@@ -87,7 +87,7 @@ class _RegisterSecondPageState extends State<RegisterSecondPage> {
                 ),
                 CustomButton(
                     buttonText: "下一步",
-                    buttonColor: Colors.red,
+                    bgColor: Colors.red,
                     margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
                     tap: () {
                       if (_code.length > 0) {
