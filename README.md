@@ -33,6 +33,6 @@ samples, guidance on mobile development, and a full API reference.
 #### loading:flutter_easyloading
 
 
-- [IndexedStack不能滚动，PageView可以滚动切换]  
-- [icon动画效果]
-- [tabView在ProductDetailPage]
+- IndexedStack不能滚动，PageView可以滚动切换  
+- icon动画效果
+- tabView在ProductDetailPage

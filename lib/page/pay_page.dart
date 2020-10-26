@@ -55,7 +55,7 @@ class _PayPageState extends State<PayPage> {
                                       color: Color.fromRGBO(233, 233, 233, 0.8),
                                       width: 1))),
                           child: ListTile(
-                              leading: CustomImage(url: _list[index]['image']),
+                              leading: Image.network(_list[index]['image']),
                               title: Text(_list[index]['title']),
                               trailing: _list[index]['checked']
                                   ? Icon(Icons.check)

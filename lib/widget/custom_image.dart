@@ -56,12 +56,10 @@ class _CustomImageState extends State<CustomImage> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? SizedBox(
-            height: 50.h,
-            width: 50.w,
+        ? Center(
             child: CircularProgressIndicator(
-              strokeWidth: 1.w,
-            ))
+            strokeWidth: 1.w,
+          ))
         : _image;
   }
 }

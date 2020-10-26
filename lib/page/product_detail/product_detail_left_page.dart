@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
+import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/providers/cart_providers.dart';
+import 'package:flutter_jdshop/providers/user_providers.dart';
 import 'package:flutter_jdshop/utils/event_bus_util.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
@@ -27,6 +29,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
   ProductDetailItemModel _itemModel;
   StreamSubscription _eventAction;
   ScrollController _scrollController;
+  UserModel _userModel;
 
   @override
   void initState() {
@@ -46,9 +49,8 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
 
   void _initListener() {
     _eventAction = eventBus.on<ProductDetailEvent>().listen((event) {
-      debugPrint(event.str);
       if (event.type != ProductDetailType.TO_SHOPPING) {
-        _showBottomDialog(this.context);
+        _showBottomDialog(this.context, event.type);
       }
     });
   }
@@ -91,7 +93,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("build");
+    _userModel = context.watch<UserProvider>().userModel;
     return Container(
       child: ListView(physics: BouncingScrollPhysics(), children: [
         CustomImage(
@@ -191,7 +193,7 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
   }
 
   ///确认dialog
-  void _showBottomDialog(context) {
+  void _showBottomDialog(context, ProductDetailType type) {
     List<Attr> tempAttr = _itemModel.attr.map((element) {
       return Attr(
           cate: element.cate,
@@ -301,11 +303,25 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
                       buttonText: "确认",
                       bgColor: Colors.red,
                       tap: () {
-                        Navigator.pop(context);
-                        _itemModel.attr = tempAttr;
-                        _setSelectAttrs();
-                        context.read<CartProviders>().addCart(_itemModel);
-                        toastShort("加入购物车成功");
+                        if (type == ProductDetailType.ADD_CART) {
+                          ///加入购物车
+                          Navigator.pop(context);
+                          _itemModel.attr = tempAttr;
+                          _setSelectAttrs();
+                          context.read<CartProviders>().addCart(_itemModel);
+                          toastShort("加入购物车成功");
+                        } else {
+                          ///立即购买
+                          if (_userModel != null) {
+                            ///跳到结算页面
+                            List<ProductDetailItemModel> list = [];
+                            list.add(_itemModel);
+                            Navigator.pushNamed(context, '/checkOut',
+                                arguments: {'list': list});
+                          } else {
+                            toastShort("请先登录");
+                          }
+                        }
                       }))
             ]);
           });
