@@ -1,9 +1,11 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
+import 'package:flutter_jdshop/http/result_data.dart';
 import 'package:flutter_jdshop/models/focus_model.dart';
 import 'package:flutter_jdshop/models/product_model.dart';
+import 'package:flutter_jdshop/widget/custom_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -39,8 +41,7 @@ class _HomePageState extends State<HomePage>
                   autoplay: true,
                   itemBuilder: (context, index) {
                     String url = list[index].pic.replaceAll("\\", "/");
-                    return Image.network("${Config.domain}$url",
-                        fit: BoxFit.cover);
+                    return CustomImage(url: "${Config.domain}$url");
                   },
                   pagination: SwiperPagination(),
                 )))
@@ -79,7 +80,7 @@ class _HomePageState extends State<HomePage>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                              child: Image.network("$url", fit: BoxFit.cover),
+                              child: CustomImage(url: "$url"),
                               height: 140.h,
                               width: 140.w,
                               margin:
@@ -308,23 +309,25 @@ class _HomePageState extends State<HomePage>
   }
 
   void _getFocusData() async {
-    var result = await Dio().get(Config.getFocus());
-    var fromJson = FocusModel.fromJson(result.data);
+    ResultData res = await HttpManager.getInstance().get(Config.getFocus());
+    var fromJson = FocusModel.fromJson(res.data);
     setState(() {
       list = fromJson.result;
     });
   }
 
   void _getLikeProductList() async {
-    var result = await Dio().get(Config.getLikeProductList());
-    var fromJson = ProductModel.fromJson(result.data);
+    ResultData res =
+        await HttpManager.getInstance().get(Config.getLikeProductList());
+    var fromJson = ProductModel.fromJson(res.data);
     setState(() {
       likeProductList = fromJson.result;
     });
   }
 
   void _getHotProductList() async {
-    var result = await Dio().get(Config.getHotProductList());
+    ResultData result =
+        await HttpManager.getInstance().get(Config.getHotProductList());
     var fromJson = ProductModel.fromJson(result.data);
     setState(() {
       hotProductList = fromJson.result;

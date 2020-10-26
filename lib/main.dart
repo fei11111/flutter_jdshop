@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_jdshop/providers/address_provider.dart';
 import 'package:flutter_jdshop/providers/cart_providers.dart';
 import 'package:flutter_jdshop/providers/user_providers.dart';
@@ -19,11 +20,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Colors.white),
-      title: 'JD Shop',
-      initialRoute: "/",
-      onGenerateRoute: onGenerateRoute,
-    );
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primaryColor: Colors.white),
+        title: 'JD Shop',
+        initialRoute: "/",
+        onGenerateRoute: onGenerateRoute,
+        builder: (BuildContext context, Widget child) {
+          /// make sure that loading can be displayed in front of all other widgets
+          return FlutterEasyLoading(child: child);
+        });
   }
 }

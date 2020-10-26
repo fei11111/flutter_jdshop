@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
+import 'package:flutter_jdshop/http/result_data.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
 import 'package:flutter_jdshop/page/product_detail/product_detail_right_page.dart';
 import 'package:flutter_jdshop/page/product_detail/product_detail_left_page.dart';
@@ -37,8 +39,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     _id = widget.arguments['id'];
     String url = Config.getProductDetail(_id);
     debugPrint("商品详情URL:$url");
-    var response = await Dio().get(url);
-    var data = ProductDetailModel.fromJson(response.data);
+    ResultData resultData = await HttpManager.getInstance().get(url);
+    var data = ProductDetailModel.fromJson(resultData.data);
     setState(() {
       _itemModel = data.result;
     });

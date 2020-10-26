@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
+import 'package:flutter_jdshop/widget/custom_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 ///支付页码
@@ -54,8 +55,7 @@ class _PayPageState extends State<PayPage> {
                                       color: Color.fromRGBO(233, 233, 233, 0.8),
                                       width: 1))),
                           child: ListTile(
-                              leading: Image.network(_list[index]['image'],
-                                  fit: BoxFit.cover),
+                              leading: CustomImage(url: _list[index]['image']),
                               title: Text(_list[index]['title']),
                               trailing: _list[index]['checked']
                                   ? Icon(Icons.check)

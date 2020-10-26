@@ -3,6 +3,7 @@ import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
 import 'package:flutter_jdshop/page/cart/cart_num_page.dart';
 import 'package:flutter_jdshop/providers/cart_providers.dart';
+import 'package:flutter_jdshop/widget/custom_image.dart';
 import 'package:flutter_jdshop/widget/custom_tip_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -63,9 +64,9 @@ class _CartItemPageState extends State<CartItemPage> {
                   height: 160.h,
                   child: AspectRatio(
                       aspectRatio: 1 / 1,
-                      child: Image.network(
-                          "${Config.domain}${_model.pic.replaceAll("\\", "/")}",
-                          fit: BoxFit.cover))),
+                      child: CustomImage(
+                          url:
+                              "${Config.domain}${_model.pic.replaceAll("\\", "/")}"))),
               Expanded(
                   flex: 1,
                   child: Container(

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
+import 'package:flutter_jdshop/http/result_data.dart';
 import 'package:flutter_jdshop/models/address_model.dart';
 import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/providers/address_provider.dart';
@@ -46,12 +48,10 @@ class _DefaultAddressWidgetState extends State<DefaultAddressWidget> {
     Map map = {'uid': userModel.id, 'salt': userModel.salt};
     String sign = SignUtil.getSign(map);
     debugPrint("_getDefaultAddress sign=$sign");
-    var response =
-        await Dio().get(Config.getDefaultAddress(userModel.id, sign));
-    var data = response.data;
-    debugPrint("默认地址返回:$data");
-    if (data['success']) {
-      AddressModel addressModel = AddressModel.fromJson(data);
+    ResultData resultData =
+        await HttpManager.getInstance().get(Config.getDefaultAddress(userModel.id, sign));
+    if (resultData.success) {
+      AddressModel addressModel = AddressModel.fromJson(resultData.data);
       if (addressModel != null) {
         if (addressModel.result != null && addressModel.result.length > 0) {
           _addressItemModel = addressModel.result[0];
@@ -61,7 +61,7 @@ class _DefaultAddressWidgetState extends State<DefaultAddressWidget> {
       }
     } else {
       _addressItemModel = AddressItemModel(); //初始化，为了让界面显示loading状态
-      toastShort(data['message']);
+      toastShort(resultData.message);
     }
     context.read<AddressProvider>().setDefaultAddress(_addressItemModel);
   }

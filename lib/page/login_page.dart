@@ -1,14 +1,11 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
+import 'package:flutter_jdshop/http/result_data.dart';
 import 'package:flutter_jdshop/providers/user_providers.dart';
-import 'package:flutter_jdshop/utils/event_bus_util.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_jdshop/widget/custom_text_field.dart';
-import 'package:flutter_jdshop/widget/loading_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
@@ -112,25 +109,21 @@ class _LoginPageState extends State<LoginPage> {
       toastShort("密码少于6位");
       return;
     }
-    showingDialog(context);
-    var response = await Dio().post(Config.getLogin(),
-        data: {'username': _userName, 'password': _password});
-    var data = response.data;
-    debugPrint("登录返回:$data");
-    if (data['success']) {
-      closeDialog(context);
-      var list = data['userinfo'];
+    ResultData resultData = await HttpManager.getInstance().post(
+        Config.getLogin(),
+        params: {'username': _userName, 'password': _password});
+    if (resultData.success) {
+      var list = resultData.data['userinfo'];
       if (list.length > 0) {
         var userInfo = list[0];
         context.read<UserProvider>().login(userInfo);
         toastShort("登录成功");
         Navigator.pop(context);
       } else {
-        toastShort(data['message']);
+        toastShort(resultData.message);
       }
     } else {
-      closeDialog(context);
-      toastShort(data['message']);
+      toastShort(resultData.message);
     }
   }
 }

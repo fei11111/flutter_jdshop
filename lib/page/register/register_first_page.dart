@@ -1,7 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
+import 'package:flutter_jdshop/http/result_data.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_jdshop/widget/custom_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -108,14 +109,13 @@ class _RegisterFirstPageState extends State<RegisterFirstPage> {
   void _sendCode() async {
     RegExp reg = RegExp(Config.phoneExp);
     if (reg.hasMatch(_tel)) {
-      var response = await Dio().post(Config.getCode(), data: {'tel': _tel});
-      var data = response.data;
-      debugPrint("发送验证码返回$data");
-      if (data['success'] && data['code'] != null) {
+      ResultData resultData = await HttpManager.getInstance()
+          .post(Config.getCode(), params: {'tel': _tel});
+      if (resultData.success && resultData.data['code'] != null) {
         Navigator.pushNamed(context, '/registerSecond',
-            arguments: {"tel": _tel, "code": data['code']});
+            arguments: {"tel": _tel, "code": resultData.data['code']});
       } else {
-        toastShort(data['message']);
+        toastShort(resultData.message);
       }
     } else {
       toastShort("手机格式不对");

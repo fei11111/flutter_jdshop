@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
 import 'package:flutter_jdshop/models/cate_model.dart';
 import 'package:flutter_jdshop/widget/loading_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -166,7 +166,7 @@ class _CategoryPageState extends State<CategoryPage>
 
   ///获取左侧列表数据
   void _getLeftCateData() async {
-    var result = await Dio().get(Config.getCateLeft());
+    var result = await HttpManager.getInstance().get(Config.getCateLeft());
     var fromJson = CateModel.fromJson(result.data);
     setState(() {
       leftList = fromJson.result;
@@ -178,8 +178,8 @@ class _CategoryPageState extends State<CategoryPage>
 
   ///获取右侧列表数据
   void _getRightCateData(int currentIndex) async {
-    var result =
-        await Dio().get(Config.getCateRight(leftList[currentIndex].id));
+    var result = await HttpManager.getInstance()
+        .get(Config.getCateRight(leftList[currentIndex].id));
     var fromJson = CateModel.fromJson(result.data);
     setState(() {
       rightList = fromJson.result;

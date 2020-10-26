@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
 import 'package:flutter_jdshop/models/product_model.dart';
+import 'package:flutter_jdshop/widget/custom_image.dart';
 import 'package:flutter_jdshop/widget/loading_widget.dart';
 import 'package:flutter_jdshop/widget/no_data_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,8 +87,7 @@ class _ProductListPageState extends State<ProductListPage> {
     } else {
       url = Config.getProductListByKeyWords(_keyWords, _page, _sort, _pageSize);
     }
-    debugPrint("商品列表url:$url");
-    var response = await Dio().get(url);
+    var response = await HttpManager.getInstance().get(url);
     var result = ProductModel.fromJson(response.data);
 
     if (result.result.length < _pageSize) {
@@ -134,8 +135,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                       Container(
                                         width: 180.w,
                                         height: 180.h,
-                                        child: Image.network(imageUrl,
-                                            fit: BoxFit.cover),
+                                        child: CustomImage(url: imageUrl),
                                       ),
                                       Expanded(
                                           flex: 1,

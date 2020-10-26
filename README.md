@@ -30,6 +30,7 @@ samples, guidance on mobile development, and a full API reference.
 #### toast:fluttertoast
 #### 城市选择器:city_pickers
 #### 加密:crypto
+#### loading:flutter_easyloading
 
 
 [IndexedStack不能滚动，PageView可以滚动切换]  

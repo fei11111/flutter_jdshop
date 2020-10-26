@@ -2,6 +2,8 @@ import 'package:city_pickers/city_pickers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
+import 'package:flutter_jdshop/http/result_data.dart';
 import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/providers/user_providers.dart';
 import 'package:flutter_jdshop/utils/event_bus_util.dart';
@@ -136,21 +138,20 @@ class _AddressAddPageState extends State<AddressAddPage> {
     };
     String sign = SignUtil.getSign(map);
     debugPrint("_addAddress sign=$sign");
-    var response = await Dio().post(Config.getAddAddress(), data: {
+    ResultData result =
+        await HttpManager.getInstance().post(Config.getAddAddress(), params: {
       'uid': userModel.id,
       'sign': sign,
       'phone': _tel,
       'name': _userName,
       'address': _area + _detail
     });
-    var data = response.data;
-    debugPrint("新增地址返回$data");
-    if (data['success']) {
+    if (result.success) {
       eventBus.fire(AddressEvent("新增成功!", AddressType.ADD_ADDRESS));
       eventBus.fire(AddressEvent("更新默认地址", AddressType.DEFAULT_ADDRESS));
       Navigator.pop(context);
     } else {
-      toastShort(data['message']);
+      toastShort(result.message);
     }
   }
 }

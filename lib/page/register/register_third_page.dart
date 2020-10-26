@@ -1,11 +1,9 @@
 import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/config/sp.dart';
-import 'package:flutter_jdshop/page/login_page.dart';
-import 'package:flutter_jdshop/page/tabs_page.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
+import 'package:flutter_jdshop/http/result_data.dart';
 import 'package:flutter_jdshop/utils/sp_util.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
@@ -36,12 +34,11 @@ class _RegisterThirdPageState extends State<RegisterThirdPage> {
   }
 
   void _register() async {
-    var response = await Dio().post(Config.getRegister(),
-        data: {'tel': _tel, 'code': _code, 'password': _password});
-    var data = response.data;
-    debugPrint("注册完成:$data");
-    if (data['success']) {
-      var list = data['userinfo'];
+    ResultData resultData = await HttpManager.getInstance().post(
+        Config.getRegister(),
+        params: {'tel': _tel, 'code': _code, 'password': _password});
+    if (resultData.success) {
+      var list = resultData.data['userinfo'];
       if (list.length > 0) {
         var userInfo = list[0];
         await SPUtil.setString(SP.userInfoKey, json.encode(userInfo));
@@ -59,10 +56,10 @@ class _RegisterThirdPageState extends State<RegisterThirdPage> {
         // });
         toastShort("注册成功");
       } else {
-        toastShort(data['message']);
+        toastShort(resultData.message);
       }
     } else {
-      toastShort(data['message']);
+      toastShort(resultData.message);
     }
   }
 

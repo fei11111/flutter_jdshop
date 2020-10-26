@@ -40,6 +40,7 @@ dependencies:
   fluttertoast: ^7.1.1
   city_pickers: ^0.2.0
   crypto: ^2.1.5
+  flutter_easyloading: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,9 @@ flutter:
     - images/3.0x/user.png
     - images/3.0x/user_bg.jpg
     - images/3.0x/login.png
+    - images/default_pic.png
+    - images/2.0x/default_pic.png
+    - images/3.0x/default_pic.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

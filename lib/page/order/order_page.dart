@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
 import 'package:flutter_jdshop/models/order_model.dart';
 import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/providers/user_providers.dart';
 import 'package:flutter_jdshop/utils/sign_util.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
+import 'package:flutter_jdshop/widget/custom_image.dart';
 import 'package:flutter_jdshop/widget/loading_widget.dart';
 import 'package:flutter_jdshop/widget/no_data_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,7 +47,8 @@ class _OrderListPageState extends State<OrderListPage>
         SignUtil.getSign({'uid': userModel.id, 'salt': userModel.salt});
     String url = Config.getOrderList(userModel.id, sign);
     debugPrint("$url");
-    var response = await Dio().get(Config.getOrderList(userModel.id, sign));
+    var response = await HttpManager.getInstance()
+        .get(Config.getOrderList(userModel.id, sign));
     var data = response.data;
     debugPrint("订单列表请求返回$data");
     if (data['success']) {
@@ -169,9 +172,9 @@ class _OrderListPageState extends State<OrderListPage>
                             margin: EdgeInsets.only(right: 15.w),
                             child: AspectRatio(
                                 aspectRatio: 1 / 1,
-                                child: Image.network(
-                                    "${Config.domain}${e.productImg.replaceAll("\\", "/")}",
-                                    fit: BoxFit.cover))),
+                                child: CustomImage(
+                                    url:
+                                        "${Config.domain}${e.productImg.replaceAll("\\", "/")}"))),
                         Expanded(
                             flex: 1,
                             child: Column(

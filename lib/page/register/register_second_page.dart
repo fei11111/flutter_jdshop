@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
+import 'package:flutter_jdshop/http/result_data.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
 import 'package:flutter_jdshop/widget/custom_text_field.dart';
@@ -121,32 +122,30 @@ class _RegisterSecondPageState extends State<RegisterSecondPage> {
   }
 
   void _validateCode() async {
-    var response = await Dio()
-        .post(Config.getValidateCode(), data: {'tel': _tel, 'code': _code});
-    var data = response.data;
-    debugPrint("注册第二步返回：$data");
-    if (data['success']) {
+    ResultData resultData = await HttpManager.getInstance()
+        .post(Config.getValidateCode(), params: {'tel': _tel, 'code': _code});
+
+    if (resultData.success) {
       Navigator.pushNamed(context, '/registerThird',
           arguments: {'tel': _tel, 'code': _code});
     } else {
-      toastShort(data['message']);
+      toastShort(resultData.message);
     }
   }
 
   void _sendCode() async {
     RegExp reg = RegExp(Config.phoneExp);
     if (reg.hasMatch(_tel)) {
-      var response = await Dio().post(Config.getCode(), data: {'tel': _tel});
-      var data = response.data;
-      debugPrint("发送验证码返回$data");
+      ResultData resultData = await HttpManager.getInstance()
+          .post(Config.getCode(), params: {'tel': _tel});
       setState(() {
         _second = 10;
         _isSendCode = false;
       });
       _showTimer();
-      if (data['success'] && data['code'] != null) {
+      if (resultData.success && resultData.data['code'] != null) {
       } else {
-        toastShort(data['message']);
+        toastShort(resultData.message);
       }
     } else {
       toastShort("手机格式不对");

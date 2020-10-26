@@ -1,6 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
+import 'package:flutter_jdshop/http/result_data.dart';
 import 'package:flutter_jdshop/models/address_model.dart';
 import 'package:flutter_jdshop/models/product_detail_model.dart';
 import 'package:flutter_jdshop/models/user_model.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_jdshop/providers/cart_providers.dart';
 import 'package:flutter_jdshop/providers/user_providers.dart';
 import 'package:flutter_jdshop/utils/sign_util.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
-import 'package:flutter_jdshop/widget/loading_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
@@ -141,8 +141,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
     };
     debugPrint("map=${map.toString()}");
     String sign = SignUtil.getSign(map);
-    showingDialog(context);
-    var response = await Dio().post(Config.getDoOrder(), data: {
+    ResultData resultData =
+        await HttpManager.getInstance().post(Config.getDoOrder(), params: {
       'uid': userModel.id,
       'phone': model.phone,
       'address': model.address,
@@ -151,21 +151,18 @@ class _CheckOutPageState extends State<CheckOutPage> {
       'products': json.encode(_list),
       'sign': sign
     });
-    var data = response.data;
-    closeDialog(context);
-    debugPrint("提交订单请求返回$data");
-    if (data['success']) {
+    if (resultData.success) {
       ///删除购物车选中商品
       context.read<CartProviders>().deleteCartByChecked();
-      if (data['result']['order_id'] != null &&
-          data['result']['all_price'] != null) {
+      if (resultData.data['result']['order_id'] != null &&
+          resultData.data['result']['all_price'] != null) {
         Navigator.pushNamed(context, '/pay', arguments: {
-          'order_id': data['result']['order_id'],
-          'all_price': data['result']['all_price']
+          'order_id': resultData.data['result']['order_id'],
+          'all_price': resultData.data['result']['all_price']
         });
       }
     } else {
-      toastShort(data['message']);
+      toastShort(resultData.message);
     }
   }
 }

@@ -8,6 +8,7 @@ import 'package:flutter_jdshop/providers/cart_providers.dart';
 import 'package:flutter_jdshop/utils/event_bus_util.dart';
 import 'package:flutter_jdshop/utils/toast_util.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
+import 'package:flutter_jdshop/widget/custom_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'cart_num_page.dart';
@@ -93,8 +94,8 @@ class _ProductDetailLeftState extends State<ProductDetailLeft>
     debugPrint("build");
     return Container(
       child: ListView(physics: BouncingScrollPhysics(), children: [
-        Image.network("${Config.domain}${_itemModel.pic.replaceAll("\\", "/")}",
-            fit: BoxFit.cover),
+        CustomImage(
+            url: "${Config.domain}${_itemModel.pic.replaceAll("\\", "/")}"),
         Padding(
             padding: EdgeInsets.all(10.w),
             child: Column(children: [

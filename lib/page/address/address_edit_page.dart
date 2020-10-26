@@ -2,6 +2,8 @@ import 'package:city_pickers/city_pickers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
+import 'package:flutter_jdshop/http/http_manager.dart';
+import 'package:flutter_jdshop/http/result_data.dart';
 import 'package:flutter_jdshop/models/address_model.dart';
 import 'package:flutter_jdshop/models/user_model.dart';
 import 'package:flutter_jdshop/providers/user_providers.dart';
@@ -127,7 +129,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
       'address': _areaController.text + _detail
     };
     String sign = SignUtil.getSign(map);
-    var response = await Dio().post(Config.getEditAddress(), data: {
+    ResultData resultData = await HttpManager.getInstance().post(Config.getEditAddress(), params: {
       'uid': userModel.id,
       'sign': sign,
       'id': _addressItemModel.id,
@@ -135,9 +137,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
       'phone': _telController.text,
       'address': _areaController.text + _detail
     });
-    var data = response.data;
-    debugPrint("修改地址请求返回$data");
-    if (data['success']) {
+    if (resultData.success) {
       if (_addressItemModel.defaultAddress == 1) {
         ///本来是默认就要调用重新获取默认接口数据
         eventBus.fire(AddressEvent("修改地址", AddressType.DEFAULT_ADDRESS));
@@ -146,7 +146,7 @@ class _AddressEditPageState extends State<AddressEditPage> {
       toastShort('修改成功');
       Navigator.pop(context);
     } else {
-      toastShort(data['message']);
+      toastShort(resultData.message);
     }
   }
 }
