@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/config/config.dart';
 import 'package:flutter_jdshop/http/http_manager.dart';

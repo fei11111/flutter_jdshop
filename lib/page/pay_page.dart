@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jdshop/widget/custom_button.dart';
-import 'package:flutter_jdshop/widget/custom_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 ///支付页码
